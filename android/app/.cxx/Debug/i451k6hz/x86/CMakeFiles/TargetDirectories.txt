@@ -1,0 +1,2 @@
+D:/inzynierka/found_you_app/android/app/.cxx/Debug/i451k6hz/x86/CMakeFiles/edit_cache.dir
+D:/inzynierka/found_you_app/android/app/.cxx/Debug/i451k6hz/x86/CMakeFiles/rebuild_cache.dir

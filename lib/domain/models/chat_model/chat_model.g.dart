@@ -1,0 +1,20 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'chat_model.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_ChatModel _$ChatModelFromJson(Map<String, dynamic> json) => _ChatModel(
+  friend: SuggestedFriendModel.fromJson(json['friend'] as Map<String, dynamic>),
+  lastMessage: json['lastMessage'] as String,
+  lastMessageTime: DateTime.parse(json['lastMessageTime'] as String),
+);
+
+Map<String, dynamic> _$ChatModelToJson(_ChatModel instance) =>
+    <String, dynamic>{
+      'friend': instance.friend,
+      'lastMessage': instance.lastMessage,
+      'lastMessageTime': instance.lastMessageTime.toIso8601String(),
+    };

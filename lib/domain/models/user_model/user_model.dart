@@ -1,0 +1,39 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';  // ▶️ dodajemy
+
+part 'user_model.freezed.dart';
+part 'user_model.g.dart';
+
+@freezed
+abstract class UserModel with _$UserModel {
+  @JsonSerializable(checked: true)// ◀️ bez 'abstract'
+  const factory UserModel({
+    required int id,
+    required String email,
+    required String username,
+    required DateTime birthday,
+    required String bio,
+
+    @JsonKey(name: 'image_url')
+    String? imageUrl,
+
+    @JsonKey(name: 'owned_events')
+    required List<dynamic> ownedEvents,
+
+    @JsonKey(name: 'participated_events')
+    required List<dynamic> participatedEvents,
+
+    required List<String> passions,
+
+    @JsonKey(name: 'created_at')
+    required DateTime createdAt,
+
+    @JsonKey(name: 'friend_count')
+    required int friendCount,
+
+    required String sex,
+  }) = _UserModel;
+
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+}
