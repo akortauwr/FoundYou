@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:found_you_app/domain/models/user_model/user_model.dart';
+import 'package:found_you_app/ui/common_widgets/neo_card.dart';
+import 'package:found_you_app/ui/common_widgets/neo_icon_buttons.dart';
+import 'package:found_you_app/ui/common_widgets/neo_select_display.dart';
+import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 import 'package:found_you_app/ui/profile/view_models/profile_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -19,21 +25,14 @@ class ProfileView extends StatelessWidget {
 
     final today = DateTime.now();
     int age = today.year - user.birthday.year;
-    if (today.month < user.birthday.month ||
-        (today.month == user.birthday.month && today.day < user.birthday.day)) {
+    if (today.month < user.birthday.month || (today.month == user.birthday.month && today.day < user.birthday.day)) {
       age--;
     }
 
     return Scaffold(
-      backgroundColor: Colors.grey[100],  // jasne tło dla kontrastu z kartami
-      appBar: AppBar(
-        title: Text("Profil użytkownika"),
-        centerTitle: true,
-        elevation: 0,
-      ),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.fromLTRB(32.0, 64, 32.0, 32.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -68,80 +67,70 @@ class ProfileView extends StatelessWidget {
     );
   }
 }
+
 class ProfileInfoCard extends StatelessWidget {
   final UserModel user;
   final int age;
+
   const ProfileInfoCard({Key? key, required this.user, required this.age}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4, // delikatny cień
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Zdjęcie profilowe lub ikona domyślna
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.grey[300],
-              backgroundImage: (user.imageUrl != null && user.imageUrl!.isNotEmpty)
-                  ? NetworkImage(user.imageUrl!)
-                  : null,
-              child: (user.imageUrl == null || user.imageUrl!.isEmpty)
-                  ? Icon(Icons.person, size: 50, color: Colors.grey[700])
-                  : null,
+    return NeoCard(
+      margin: const EdgeInsets.all(0),
+      color: NeoColors.lightPurple,
+      child: Column(
+        children: [
+          // Zdjęcie profilowe lub ikona domyślna
+          Container(
+            width: 164,
+            height: 164,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.black, width: 4),
+              boxShadow: [BoxShadow(color: Colors.black, offset: Offset(3, 3), blurRadius: 0)],
             ),
-            const SizedBox(height: 16),
-            // Imię i wiek użytkownika
-            Text(
-              "${user.username}, $age",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            // Bio / opis użytkownika
-            Text(
-              user.bio,
-              style: TextStyle(fontSize: 16, color: Colors.grey[800]),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            // Liczba znajomych
-            Row(
+            child: user.imageUrl != null ? ClipOval(
+                child: Image.network(user.imageUrl!)
+              ): Container(),
+          ),
+          const SizedBox(height: 16),
+          // Imię i wiek użytkownika
+          Text(
+            "${user.username}, $age",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          // Bio / opis użytkownika
+          NeoCard(borderRadius: BorderRadius.all(Radius.zero), child: Text(user.bio, style: TextStyle(fontSize: 16,
+              fontWeight:
+          FontWeight
+              .w600)
+              , textAlign:
+          TextAlign
+              .center)),
+          const SizedBox(height: 8),
+          // Liczba znajomych
+          NeoCard(
+            borderRadius: BorderRadius.all(Radius.zero),
+            width: 128,
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.group, size: 20, color: Colors.grey),
+                const Icon(Icons.group,),
                 const SizedBox(width: 6),
-                Text(
-                  '${user.friendCount} znajomych',
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                ),
+                Text('${user.friendCount}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
               ],
             ),
-            const SizedBox(height: 16),
-            // Pasje użytkownika jako Chips
-            if (user.passions.isNotEmpty) ...[
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Pasje:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 4,
-                children: user.passions.map((p) => Chip(
-                  label: Text(p),
-                  backgroundColor: Colors.grey[200],
-                )).toList(),
-              ),
-            ],
+          ),
+          const SizedBox(height: 16),
+          // Pasje użytkownika jako Chips
+          if (user.passions.isNotEmpty) ...[
+            NeoSelectDisplay(labels: user.passions, maxToShow: 5, fontSize: 16.0),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -166,42 +155,65 @@ class SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return NeoCard(
+      margin: const EdgeInsets.all(0),
+      padding: const EdgeInsets.all(32),
+      borderRadius: BorderRadius.all(Radius.zero),
+
       child: Column(
         children: [
-          ListTile(
-            leading: const Icon(Icons.lock_outline),
-            title: const Text('Zmień hasło'),
+          _buildTile(
+            icon: Icons.lock,
+            title: 'Zmień hasło',
             onTap: onChangePassword,
           ),
-          const Divider(height: 1),
-          ListTile(
-            leading: const Icon(Icons.description),
-            title: const Text('Regulamin'),
+          SizedBox(height: 16),
+          _buildTile(
+            icon: Icons.description,
+            title: 'Regulamin',
             onTap: onTermsOfService,
           ),
-          const Divider(height: 1),
-          ListTile(
-            leading: const Icon(Icons.rule),
-            title: const Text('Zasady korzystania'),
+          SizedBox(height: 16),
+          _buildTile(
+            icon: Icons.rule,
+            title: 'Zasady korzystania',
             onTap: onRules,
           ),
-          const Divider(height: 1),
-          ListTile(
-            leading: const Icon(Icons.edit),
-            title: const Text('Edytuj dane'),
+
+          SizedBox(height: 16),
+          _buildTile(
+            icon: Icons.edit,
+            title: 'Edytuj dane',
             onTap: onEditProfile,
           ),
-          const Divider(height: 1),
-          ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Wyloguj się'),
+          SizedBox(height: 16),
+          _buildTile(
+            icon: Icons.logout,
+            title: 'Wyloguj się',
             onTap: onLogout,
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return Row(
+      children: [
+        NeoIconButton(child: Icon(icon, size: 24), onPressed: onTap, backgroundColor: NeoColors.mossGreen,
+            shadowOffset: const Offset(4, 4)),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
     );
   }
 }

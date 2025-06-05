@@ -8,5 +8,6 @@ final class Paths {
   static const test = '/test';
   static const swipe = '/swipe';
   static const profile = '/profile';
-  static const messages = '/messages';
+  static const conversations = '/conversations';
+  static const chats = '/chats';
 }

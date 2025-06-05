@@ -6,7 +6,7 @@ import 'package:found_you_app/utils/result.dart';
 class LoginViewModel extends ChangeNotifier{
   final AuthRepository _authRepository;
 
-  final emailController = TextEditingController(text: 'jan.kowalski@example.com');
+  final emailController = TextEditingController(text: 'filip.kowalski45@example.pl');
   final passwordController = TextEditingController(text: 'password');
 
   bool rememberMe = false;
@@ -36,11 +36,8 @@ class LoginViewModel extends ChangeNotifier{
       rememberMe: rememberMe,
     );
 
-    print('Login result: $result');
 
     if (result is Error<void>) {
-      // TODO Handle error
-      print('Login failed: ${result.error}');
       _loginError = true;
 
     }
@@ -49,13 +46,10 @@ class LoginViewModel extends ChangeNotifier{
   }
 
   Future<void> executeLogin() async {
-    print('Executing login...');
     if (login.running) {
-      print('Login command is already running');
       return;
     }
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-      print('Email or password is empty');
       _loginError = true;
       notifyListeners();
       return;

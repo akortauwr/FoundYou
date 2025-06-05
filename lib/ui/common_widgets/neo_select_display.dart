@@ -5,15 +5,17 @@ import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 class NeoSelectDisplay extends StatelessWidget {
   /// List of labels to display.
   final List<String> labels;
+  final double fontSize;
 
   /// Maximum number of items to show (null = unlimited).
   final int? maxToShow;
 
   /// Color for the displayed items.
 
-   NeoSelectDisplay({
+    NeoSelectDisplay({
     Key? key,
     required this.labels,
+    this.fontSize = 12,
     this.maxToShow,
   }) : super(key: key);
 
@@ -28,14 +30,14 @@ class NeoSelectDisplay extends StatelessWidget {
       runSpacing: 8,
       alignment: WrapAlignment.center,
       children: [
-        ...toShow.map((label) => _buildItem(label)),
+        ...toShow.map((label) => _buildItem(label, fontSize)),
         if (maxToShow != null && labels.length > maxToShow!)
           _buildOverflowIndicator(labels.length - maxToShow!)
       ],
     );
   }
 
-  Widget _buildItem(String label) {
+  Widget _buildItem(String label, double fontSize) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
@@ -48,10 +50,10 @@ class NeoSelectDisplay extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,
-          fontSize: 12
+          fontSize: fontSize,
         ),
       ),
     );

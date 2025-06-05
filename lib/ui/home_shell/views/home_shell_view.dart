@@ -18,7 +18,9 @@ class HomeShellView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<HomeShellViewModel>();
-    vm.setIndexByLocation(currentLocation);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      vm.setIndexByLocation(currentLocation);
+    });
 
     return Scaffold(
       body: child,
@@ -34,14 +36,13 @@ class HomeShellView extends StatelessWidget {
               context.go(Paths.swipe);
               break;
             case 2:
-              context.go(Paths.messages);
+              context.go(Paths.conversations);
               break;
             case 3:
               context.go(Paths.profile);
               break;
           }
         },
-        centerSvgAsset: 'assets/rugby.svg', onCenterTap: () {  },
       ),
     );
   }

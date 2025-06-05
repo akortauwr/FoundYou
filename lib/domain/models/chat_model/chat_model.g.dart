@@ -7,8 +7,13 @@ part of 'chat_model.dart';
 // **************************************************************************
 
 _ChatModel _$ChatModelFromJson(Map<String, dynamic> json) => _ChatModel(
-  friend: SuggestedFriendModel.fromJson(json['friend'] as Map<String, dynamic>),
-  lastMessage: json['lastMessage'] as String,
+  friend:
+      (json['friend'] as List<dynamic>)
+          .map((e) => SuggestedFriendModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+  lastMessage: MessageModel.fromJson(
+    json['lastMessage'] as Map<String, dynamic>,
+  ),
   lastMessageTime: DateTime.parse(json['lastMessageTime'] as String),
 );
 

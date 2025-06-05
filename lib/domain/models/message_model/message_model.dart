@@ -7,25 +7,11 @@ part 'message_model.g.dart';
 
 @freezed
 abstract class MessageModel  with _$MessageModel {
-  // final String id;
-  // final String senderId;
-  // final String receiverId;
-  // final String content;
-  // final DateTime timestamp;
-  //
-  // MessageModel({
-  //   required this.id,
-  //   required this.senderId,
-  //   required this.receiverId,
-  //   required this.content,
-  //   required this.timestamp,
-  // });
   const factory MessageModel({
-    required String id,
-    required String senderId,
-    required String receiverId,
+    required int id,
+    required int senderId,
     required String content,
-    required DateTime timestamp,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
   }) = _MessageModel;
 
   factory MessageModel.fromJson(Map<String, Object?> json) =>

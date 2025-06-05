@@ -12,4 +12,29 @@ class SuggestedFriendsRepositoryNetwork extends SuggestedFriendsRepository {
   Future<Result<List<SuggestedFriendModel>>> loadSuggestedFriends() async {
     return await apiClient.getSuggestedFriends();
   }
+
+  @override
+  Future<Result<List<SuggestedFriendModel>>> loadNearYou() async {
+    return await apiClient.getNearYou();
+  }
+
+  @override
+  Future<Result<List<SuggestedFriendModel>>> loadNewMatches() async {
+    return await apiClient.getNewMatches();
+  }
+
+  @override
+  Future<Result<List<SuggestedFriendModel>>> loadRecentLikes() async {
+    return await apiClient.getRecentLikes();
+  }
+
+  @override
+  Future<Result<void>> likeUser(int userId) async {
+    return await apiClient.likeUser(userId);
+  }
+
+  @override
+  Future<Result<void>> dislikeUser(int userId) async {
+    return await apiClient.dislikeUser(userId);
+  }
 }

@@ -25,7 +25,7 @@ class AuthApiClient {
 
   Future<Result<String>> refreshToken(String refreshToken) async {
     try {
-      final response = await _dio.post('/api/refresh-token', data: {'refresh': refreshToken});
+      final response = await _dio.post('/api/token/refresh/', data: {'refresh': refreshToken});
       return Result.ok(response.data['access']);
     } on DioException catch (e) {
       return Result.error(mapDioError(e));
@@ -71,7 +71,7 @@ class AuthApiClient {
 
   Future<Result<void>> register({required Map<String, dynamic> data}) async {
     try {
-      print('Register pytam endpoint data: $data');
+
       data['birthday'] = (data['birthday'] as DateTime).toIso8601String();
       final response = await _dio.post('/api/users/', data: data);
       if (response.statusCode == 200) {

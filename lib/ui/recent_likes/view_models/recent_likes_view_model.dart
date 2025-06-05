@@ -1,15 +1,19 @@
-// presentation/viewmodels/new_matches_viewmodel.dart
+// presentation/viewmodels/recent_likes_view_model.dart
 import 'package:flutter/material.dart';
-import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart'; // Adjust path as needed
+import 'package:found_you_app/data/repositories/suggested_friends/suggested_friends_repository.dart';
+import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
+import 'package:found_you_app/utils/result.dart';
 
 class RecentLikesViewModel extends ChangeNotifier {
+  final SuggestedFriendsRepository _repository;
   List<SuggestedFriendModel> _suggestedFriends = [];
   bool _isLoading = false;
 
   List<SuggestedFriendModel> get suggestedFriends => _suggestedFriends;
   bool get isLoading => _isLoading;
 
-  RecentLikesViewModel() {
+  RecentLikesViewModel({required SuggestedFriendsRepository repository})
+      : _repository = repository {
     fetchSuggestedFriends();
   }
 
@@ -17,22 +21,15 @@ class RecentLikesViewModel extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    // Simulate network delay
-    await Future.delayed(const Duration(seconds: 1));
-
-    // Dummy Data
-    _suggestedFriends = List.generate(
-      10,
-          (index) => SuggestedFriendModel(
-        id: index,
-        username: 'User $index',
-        sex: index % 2 == 0 ? 'Male' : 'Female',
-        bio: 'This is a cool bio for User $index. Loves Flutter and Neobrutalism!',
-        age: 20 + index,
-        passions: ['Coding', 'Music', index % 3 == 0 ? 'Art' : 'Sports'],
-        imageUrl: 'https://picsum.photos/seed/${index + 1}/200', // Placeholder image URL
-      ),
-    );
+    final result = await _repository.loadRecentLikes();
+    switch (result) {
+      case Ok<List<SuggestedFriendModel>> ok:
+        _suggestedFriends = ok.value;
+        break;
+      case Error error:
+        debugPrint('Error fetching recent likes: ${error.error}');
+        break;
+    }
 
     _isLoading = false;
     notifyListeners();

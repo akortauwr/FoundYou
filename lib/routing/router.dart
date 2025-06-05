@@ -7,12 +7,19 @@ import 'package:found_you_app/ui/auth/register/widgets/register_form_view.dart';
 import 'package:found_you_app/ui/auth/register/widgets/register_view.dart';
 import 'package:found_you_app/ui/auth/reset_password/view_models/reset_password_view_model.dart';
 import 'package:found_you_app/ui/auth/reset_password/widgets/reset_password_view.dart';
+import 'package:found_you_app/ui/chats/view_models/chat_view_model.dart';
+import 'package:found_you_app/ui/chats/views/chat_view.dart';
+import 'package:found_you_app/ui/convs/view_models/convs_view_model.dart';
+import 'package:found_you_app/ui/convs/views/convs_view.dart';
 import 'package:found_you_app/ui/home/view_models/home_view_model.dart';
 import 'package:found_you_app/ui/home/views/home_view.dart';
 import 'package:found_you_app/ui/home_shell/view_models/home_shell_view_model.dart';
 import 'package:found_you_app/ui/home_shell/views/home_shell_view.dart';
+import 'package:found_you_app/ui/near_you/view_models/near_you_view_model.dart';
+import 'package:found_you_app/ui/new_matches/view_models/new_matches_view_model.dart';
 import 'package:found_you_app/ui/profile/view_models/profile_view_model.dart';
 import 'package:found_you_app/ui/profile/views/profile_view.dart';
+import 'package:found_you_app/ui/recent_likes/view_models/recent_likes_view_model.dart';
 import 'package:found_you_app/ui/swiping/view_models/friend_swipe_view_model.dart';
 import 'package:found_you_app/ui/swiping/views/friend_swipe_view.dart';
 import 'package:found_you_app/ui/test/test1/views/test1_view.dart';
@@ -44,12 +51,46 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
         GoRoute(
           path: Paths.home,
           name: 'home',
-          pageBuilder: (ctx, st) => NoTransitionPage(
-            child: ChangeNotifierProvider(
-              create: (_) => HomeViewModel(),
-              child: HomeView(viewModel: HomeViewModel(),),
-            ),
-          ),
+          pageBuilder: (ctx, st) {
+            // Tu wstrzykujemy repozytorium dla SuggestedFriendsRepository
+            // za pomocą .read<SuggestedFriendsRepository>() na kontekście.
+            return NoTransitionPage(
+              child: MultiProvider(
+                providers: [
+                  ChangeNotifierProvider<NewMatchesViewModel>(
+                    create: (_) =>
+                        NewMatchesViewModel(repository: ctx.read()),
+                  ),
+                  ChangeNotifierProvider<RecentLikesViewModel>(
+                    create: (_) =>
+                        RecentLikesViewModel(repository:  ctx.read()),
+                  ),
+                  ChangeNotifierProvider<NearYouViewModel>(
+                    create: (_) =>
+                        NearYouViewModel(repository:  ctx.read()),
+                  ),
+                  ChangeNotifierProxyProvider3<
+                      NewMatchesViewModel,
+                      RecentLikesViewModel,
+                      NearYouViewModel,
+                      HomeViewModel>(
+                    create: (context) => HomeViewModel(
+                      newMatchesVM: context.read<NewMatchesViewModel>(),
+                      recentLikesVM: context.read<RecentLikesViewModel>(),
+                      nearYouVM: context.read<NearYouViewModel>(),
+                    ),
+                    update: (context, newVM, recentVM, nearVM, homeVM) =>
+                        HomeViewModel(
+                          newMatchesVM: newVM,
+                          recentLikesVM: recentVM,
+                          nearYouVM: nearVM,
+                        ),
+                  ),
+                ],
+                child: const HomeView(),
+              ),
+            );
+          },
         ),
         GoRoute(
           path: Paths.swipe,
@@ -73,6 +114,13 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
               )..loadProfile(),
               child: ProfileView(),
             ),
+          ),
+        ),
+        GoRoute(
+          path: Paths.conversations,
+          builder: (context, state) => ChangeNotifierProvider(
+            create: (_) => ConversationsViewModel(),
+            child: const ConversationsListView(),
           ),
         ),
       ],
@@ -117,6 +165,16 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
       path: Paths.test,
       name: 'test',
       builder: (context, state) => const Test1View(),
+    ),
+    GoRoute(
+      path: '/chat/:friendId',
+      builder: (context, state) {
+        final friendId = int.parse(state.pathParameters['friendId']!);
+        return ChangeNotifierProvider(
+          create: (_) => ChatViewModel(friendId: friendId),
+          child: const ChatView(),
+        );
+      },
     ),
   ],
 );

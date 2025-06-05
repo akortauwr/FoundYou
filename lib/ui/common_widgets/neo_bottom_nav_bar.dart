@@ -10,15 +10,11 @@ typedef NavTapCallback = void Function(int index);
 class NeoBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final NavTapCallback onTap;
-  final String centerSvgAsset;
-  final VoidCallback onCenterTap;
 
   const NeoBottomNavBar({
     Key? key,
     required this.currentIndex,
     required this.onTap,
-    required this.centerSvgAsset,
-    required this.onCenterTap,
   }) : super(key: key);
 
   Widget _buildNavItem({
@@ -43,11 +39,11 @@ class NeoBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.only(bottom:32),
+      padding: const EdgeInsets.symmetric(vertical: 32),
       child: Container(
         height: 60,
         decoration: BoxDecoration(
-          color: Colors.transparent
+          color: Colors.transparent,
         ),
         child: Row(
           children: [

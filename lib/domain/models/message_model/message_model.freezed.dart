@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MessageModel {
 
- String get id; String get senderId; String get receiverId; String get content; DateTime get timestamp;
+ int get id; int get senderId; String get content;@JsonKey(name: 'created_at') DateTime get createdAt;
 /// Create a copy of MessageModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $MessageModelCopyWith<MessageModel> get copyWith => _$MessageModelCopyWithImpl<M
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessageModel&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.receiverId, receiverId) || other.receiverId == receiverId)&&(identical(other.content, content) || other.content == content)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessageModel&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.content, content) || other.content == content)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,senderId,receiverId,content,timestamp);
+int get hashCode => Object.hash(runtimeType,id,senderId,content,createdAt);
 
 @override
 String toString() {
-  return 'MessageModel(id: $id, senderId: $senderId, receiverId: $receiverId, content: $content, timestamp: $timestamp)';
+  return 'MessageModel(id: $id, senderId: $senderId, content: $content, createdAt: $createdAt)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $MessageModelCopyWith<$Res>  {
   factory $MessageModelCopyWith(MessageModel value, $Res Function(MessageModel) _then) = _$MessageModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String senderId, String receiverId, String content, DateTime timestamp
+ int id, int senderId, String content,@JsonKey(name: 'created_at') DateTime createdAt
 });
 
 
@@ -66,13 +66,12 @@ class _$MessageModelCopyWithImpl<$Res>
 
 /// Create a copy of MessageModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? senderId = null,Object? receiverId = null,Object? content = null,Object? timestamp = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? senderId = null,Object? content = null,Object? createdAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,senderId: null == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
-as String,receiverId: null == receiverId ? _self.receiverId : receiverId // ignore: cast_nullable_to_non_nullable
-as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as int,senderId: null == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
+as int,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }
@@ -84,14 +83,13 @@ as DateTime,
 @JsonSerializable()
 
 class _MessageModel implements MessageModel {
-  const _MessageModel({required this.id, required this.senderId, required this.receiverId, required this.content, required this.timestamp});
+  const _MessageModel({required this.id, required this.senderId, required this.content, @JsonKey(name: 'created_at') required this.createdAt});
   factory _MessageModel.fromJson(Map<String, dynamic> json) => _$MessageModelFromJson(json);
 
-@override final  String id;
-@override final  String senderId;
-@override final  String receiverId;
+@override final  int id;
+@override final  int senderId;
 @override final  String content;
-@override final  DateTime timestamp;
+@override@JsonKey(name: 'created_at') final  DateTime createdAt;
 
 /// Create a copy of MessageModel
 /// with the given fields replaced by the non-null parameter values.
@@ -106,16 +104,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MessageModel&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.receiverId, receiverId) || other.receiverId == receiverId)&&(identical(other.content, content) || other.content == content)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MessageModel&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.content, content) || other.content == content)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,senderId,receiverId,content,timestamp);
+int get hashCode => Object.hash(runtimeType,id,senderId,content,createdAt);
 
 @override
 String toString() {
-  return 'MessageModel(id: $id, senderId: $senderId, receiverId: $receiverId, content: $content, timestamp: $timestamp)';
+  return 'MessageModel(id: $id, senderId: $senderId, content: $content, createdAt: $createdAt)';
 }
 
 
@@ -126,7 +124,7 @@ abstract mixin class _$MessageModelCopyWith<$Res> implements $MessageModelCopyWi
   factory _$MessageModelCopyWith(_MessageModel value, $Res Function(_MessageModel) _then) = __$MessageModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String senderId, String receiverId, String content, DateTime timestamp
+ int id, int senderId, String content,@JsonKey(name: 'created_at') DateTime createdAt
 });
 
 
@@ -143,13 +141,12 @@ class __$MessageModelCopyWithImpl<$Res>
 
 /// Create a copy of MessageModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? senderId = null,Object? receiverId = null,Object? content = null,Object? timestamp = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? senderId = null,Object? content = null,Object? createdAt = null,}) {
   return _then(_MessageModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,senderId: null == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
-as String,receiverId: null == receiverId ? _self.receiverId : receiverId // ignore: cast_nullable_to_non_nullable
-as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as int,senderId: null == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
+as int,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
 }

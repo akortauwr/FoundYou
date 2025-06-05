@@ -1,66 +1,43 @@
+// presentation/viewmodels/home_view_model.dart
 import 'package:flutter/material.dart';
-import 'package:found_you_app/data/repositories/friends/friend_repository.dart';
-import 'package:found_you_app/data/repositories/friends/friend_repository_network.dart';
-import 'package:found_you_app/domain/models/friend_model/friend_model.dart';
-import 'package:found_you_app/utils/command.dart';
-import 'package:found_you_app/utils/result.dart';
+import 'package:found_you_app/ui/near_you/view_models/near_you_view_model.dart';
+import 'package:found_you_app/ui/new_matches/view_models/new_matches_view_model.dart';
+import 'package:found_you_app/ui/recent_likes/view_models/recent_likes_view_model.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  //final FriendRepository _friendRepository;
-  late Command1 getFriend;
-  FriendModel? _friend;
+  final NewMatchesViewModel newMatchesVM;
+  final RecentLikesViewModel recentLikesVM;
+  final NearYouViewModel nearYouVM;
 
-  FriendModel? get friend => _friend;
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
 
-  HomeViewModel() {
-
+  HomeViewModel({
+    required this.newMatchesVM,
+    required this.recentLikesVM,
+    required this.nearYouVM,
+  }) {
+    // Zakładamy, że pod-WM-y od razu rozpoczynają fetchSuggestedFriends w konstruktorach.
+    // Nasłuchujemy na zmiany ich stanów isLoading, by ustalić zbiorczy stan.
+    newMatchesVM.addListener(_updateLoading);
+    recentLikesVM.addListener(_updateLoading);
+    nearYouVM.addListener(_updateLoading);
+    _updateLoading(); // sprawdź od razu, czy któryś VM nie jest już załadowany
   }
 
-  final List<UserProfile> newMatches = [
-    UserProfile(name: 'Helena', imageUrl: 'https://example.com/image1.jpg'),
-    UserProfile(name: 'Jessica', imageUrl: 'https://example.com/image2.jpg'),
-    UserProfile(name: 'Jenny', imageUrl: 'https://example.com/image3.jpg'),
-    UserProfile(name: 'Eleanor', imageUrl: 'https://example.com/image4.jpg'),
-  ];
-
-  final List<DateProfile> yourDates = [
-    DateProfile(name: 'Carol', imageUrl: 'https://example.com/image5.jpg', bgColor: Colors.lightBlue.shade100),
-    DateProfile(name: 'Anna', imageUrl: 'https://example.com/image6.jpg', bgColor: Colors.purple.shade100),
-    DateProfile(name: 'Julie', imageUrl: 'https://example.com/image7.jpg', bgColor: Colors.orange.shade100),
-  ];
-
-  final List<UserProfileExtended> nearYou = [
-    UserProfileExtended(name: 'Carol Sky', imageUrl: 'https://example.com/image8.jpg', location: 'Indonesia'),
-    UserProfileExtended(name: 'Emma Brown', imageUrl: 'https://example.com/image9.jpg', location: 'Poland'),
-  ];
-
-
-
-  Future<Result<void>> _loadFriend(int friendId) async {
-
-    return Result.ok(null);
+  void _updateLoading() {
+    // Home jest loading, dopóki choć jeden z pod-WM-ów ma isLoading == true
+    _isLoading = newMatchesVM.isLoading ||
+        recentLikesVM.isLoading ||
+        nearYouVM.isLoading;
+    notifyListeners();
   }
-}
 
-class UserProfile {
-  final String name;
-  final String imageUrl;
-
-  UserProfile({required this.name, required this.imageUrl});
-}
-
-class DateProfile {
-  final String name;
-  final String imageUrl;
-  final Color bgColor;
-
-  DateProfile({required this.name, required this.imageUrl, required this.bgColor});
-}
-
-class UserProfileExtended {
-  final String name;
-  final String imageUrl;
-  final String location;
-
-  UserProfileExtended({required this.name, required this.imageUrl, required this.location});
+  @override
+  void dispose() {
+    newMatchesVM.removeListener(_updateLoading);
+    recentLikesVM.removeListener(_updateLoading);
+    nearYouVM.removeListener(_updateLoading);
+    super.dispose();
+  }
 }

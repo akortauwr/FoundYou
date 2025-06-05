@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:found_you_app/routing/paths.dart';
 
 class HomeShellViewModel extends ChangeNotifier {
   int _currentIndex = 0;
@@ -12,10 +13,10 @@ class HomeShellViewModel extends ChangeNotifier {
 
   void setIndexByLocation(String loc) {
     final map = {
-      '/home': 0,
-      '/swipe': 1,
-      '/messages': 2,
-      '/profile': 3,
+      Paths.home: 0,
+      Paths.swipe: 1,
+      Paths.conversations: 2,
+      Paths.profile: 3,
     };
     final idx = map[loc] ?? 0;
     if (idx != _currentIndex) {

@@ -16,7 +16,6 @@ class LogoutViewModel{
     final result = await _authRepository.logout();
     if (result is Error<void>) {
       // TODO Handle error
-      print('EOEOEO');
     }
     return result;
   }

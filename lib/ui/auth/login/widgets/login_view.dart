@@ -16,7 +16,6 @@ class LoginView extends StatelessWidget {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cmd = vm.login;
-      print('LoginView: ${cmd.result}');
       if (cmd.running) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Logging in...')),

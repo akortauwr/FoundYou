@@ -15,7 +15,6 @@ class ResetPasswordViewModel {
     final result = await _authRepository.resetPassword(email: email);
     if (result is Error<void>) {
       // TODO Handle error
-      print('EOEOEO');
     }
     return result;
   }

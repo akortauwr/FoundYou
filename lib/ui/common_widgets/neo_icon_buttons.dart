@@ -7,6 +7,9 @@ class NeoIconButton extends StatefulWidget {
   final bool disabled;
   final Color backgroundColor;
   final Offset shadowOffset;
+  final EdgeInsets padding;
+  final double borderWidth;
+  final BorderRadiusGeometry? borderRadius;
 
   const NeoIconButton({
     super.key,
@@ -15,6 +18,9 @@ class NeoIconButton extends StatefulWidget {
     this.disabled = false,
     this.backgroundColor = NeoColors.neonCyan,
     this.shadowOffset = const Offset(6, 6),
+    this.padding = const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+    this.borderWidth = 4.0,
+    this.borderRadius,
 
   });
 
@@ -60,12 +66,13 @@ class _NeoIconButtonState extends State<NeoIconButton> {
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           color: bgColor,
-          border: Border.all(color: Colors.black, width: 4),
+          border: Border.all(color: Colors.black, width: widget.borderWidth),
           boxShadow: [
             BoxShadow(color: Colors.black, offset: offset, blurRadius: 0),
           ],
+          borderRadius: widget.borderRadius
         ),
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        padding: widget.padding,
         child: Center(
           child: widget.child,
         ),

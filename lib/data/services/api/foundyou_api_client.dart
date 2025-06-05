@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:found_you_app/data/services/api/api_client.dart';
+import 'package:found_you_app/domain/models/chat_model/chat_model.dart';
 import 'package:found_you_app/domain/models/friend_model/friend_model.dart';
+import 'package:found_you_app/domain/models/message_model/message_model.dart';
 import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
 import 'package:found_you_app/domain/models/user_model/user_model.dart';
 import 'package:found_you_app/network/dio_client.dart';
@@ -28,7 +30,7 @@ class FoundYouApiClient {
   Future<Result<UserModel>> getProfile() async {
    try{
       final response = await apiClient.get('/api/me/');
-      print('response tutaj : $response');
+
       return Result.ok(UserModel.fromJson(response));
    }
     on DioException catch (e){
@@ -73,5 +75,152 @@ class FoundYouApiClient {
       );
     }
   }
+
+  Future<Result<List<SuggestedFriendModel>>> getNearYou() async {
+    try {
+      final response = await apiClient.get('/api/suggested-friends/near-you/');
+      if (response is List) {
+        final friends = response.map((e) => SuggestedFriendModel.fromJson(e)).toList();
+        return Result.ok(friends);
+      } else {
+        return Result.error(Exception('Invalid response format'));
+      }
+    } catch (e) {
+      return Result.error(Exception('Nie udało się pobrać znajomych w pobliżu: $e'));
+    }
+  }
+
+  Future<Result<List<SuggestedFriendModel>>> getNewMatches() async {
+    try {
+      final response = await apiClient.get('/api/suggested-friends/matches/');
+      if (response is List) {
+        final friends = response.map((e) => SuggestedFriendModel.fromJson(e)).toList();
+        return Result.ok(friends);
+      } else {
+        return Result.error(Exception('Invalid response format'));
+      }
+    } catch (e) {
+      return Result.error(Exception('Nie udało się pobrać nowych znajomych: $e'));
+    }
+  }
+
+  Future<Result<List<SuggestedFriendModel>>> getRecentLikes() async {
+    try {
+      final response = await apiClient.get('/api/suggested-friends/recent-likes/');
+      if (response is List) {
+        final friends = response.map((e) => SuggestedFriendModel.fromJson(e)).toList();
+        return Result.ok(friends);
+      } else {
+        return Result.error(Exception('Invalid response format'));
+      }
+    } catch (e) {
+      return Result.error(Exception('Nie udało się pobrać ostatnich polubień: $e'));
+    }
+  }
+
+
+
+  Future<Result<void>> likeUser(int userId) async {
+    try {
+      await apiClient.post('/api/suggested-friends/like/$userId/', {});
+      return Result.ok(null);
+    } on DioException catch (e) {
+      return Result.error(Exception('Nie udało się polubić użytkownika: ${e.message}'));
+    } catch (e) {
+      return Result.error(Exception('Nie udało się polubić użytkownika: $e'));
+    }
+  }
+
+
+  Future<Result<void>> dislikeUser(int userId) async {
+    try {
+      await apiClient.post('/api/suggested-friends/reject/$userId', {});
+      return Result.ok(null);
+    } on DioException catch (e) {
+      return Result.error(
+        Exception('Nie udało się odrzucić użytkownika: ${e.message}'),
+      );
+    } catch (e) {
+      return Result.error(
+        Exception('Nie udało się odrzucić użytkownika: $e'),
+      );
+    }
+  }
+
+  Future<Result<List<ChatModel>>> getChats() async {
+  try {
+      final response = await apiClient.get('/api/chats/');
+      if (response is List) {
+        final chats = response.map((e) => ChatModel.fromJson(e)).toList();
+        return Result.ok(chats);
+      } else {
+        return Result.error(Exception('Invalid response format'));
+      }
+    } catch (e) {
+      return Result.error(Exception('Nie udało się pobrać czatów: $e'));
+    }
+  }
+
+  Future<Result<List<MessageModel>>> getMessages(int chatId, DateTime? lastMessageTime) async {
+    try {
+      final queryParameters = lastMessageTime != null
+          ? {'last_message_time': lastMessageTime.toIso8601String()}
+          : null;
+      final response = await apiClient.get('/api/chats/$chatId/messages/', queryParameters: queryParameters);
+      if (response is List) {
+        final messages = response.map((e) => MessageModel.fromJson(e)).toList();
+        return Result.ok(messages);
+      } else {
+        return Result.error(Exception('Invalid response format'));
+      }
+    } catch (e) {
+      return Result.error(Exception('Nie udało się pobrać wiadomości: $e'));
+    }
+  }
+
+  Future<Result<List<MessageModel>>> pullMessages(
+    int chatId,
+    DateTime lastMessageTime,
+  ) async {
+    try {
+      final response = await apiClient.get(
+        '/api/chats/$chatId/messages/pull/',
+        queryParameters: {'last_message_time': lastMessageTime.toIso8601String()},
+      );
+      if (response is List) {
+        final messages = response.map((e) => MessageModel.fromJson(e)).toList();
+        return Result.ok(messages);
+      } else {
+        return Result.error(Exception('Invalid response format'));
+      }
+    } catch (e) {
+      return Result.error(Exception('Nie udało się pobrać wiadomości: $e'));
+    }
+  }
+
+  Future<Result<void>> sendMessage(
+    int chatId,
+    String content,
+  ) async {
+    try {
+      final response = await apiClient.post(
+        '/api/chats/$chatId/messages/',
+        {'content': content},
+      );
+     return Result.ok(null);
+    } catch (e) {
+      return Result.error(Exception('Nie udało się wysłać wiadomości: $e'));
+    }
+  }
+
+  Future<Result<void>> createChat(int userId) async {
+    try {
+      await apiClient.post('/api/chats/', {'user_id': userId});
+      return Result.ok(null);
+    } catch (e) {
+      return Result.error(Exception('Nie udało się utworzyć czatu: $e'));
+    }
+  }
+
 
 }
