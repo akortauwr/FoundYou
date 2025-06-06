@@ -23,7 +23,7 @@ class HomeView extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 32.0),
       child: Column(
-        children: const [
+        children: [
           NewMatchesView(),
           SizedBox(height: 16),
           RecentLikesView(),

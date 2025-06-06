@@ -103,10 +103,9 @@ class UserSwipeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onSwipe(SuggestedFriendModel user, int? direction) {
+  void onSwipe(SuggestedFriendModel user, CardSwiperDirection direction) {
     print('\n\n\n DIRECT SWIPE: $direction\n\n\n');
-    if (direction == null) return;
-    if (direction == 1 ) {
+    if (direction == CardSwiperDirection.right ) {
       // TODO: API - polubienie użytkownika
       debugPrint('Liked: ${user.username}');
       _repository.likeUser(user.id).then((result) {
@@ -114,7 +113,7 @@ class UserSwipeViewModel extends ChangeNotifier {
           debugPrint('Error liking user: ${result.error}');
         }
       });
-    } else if (direction == 0) {
+    } else if (direction == CardSwiperDirection.left) {
       // TODO: API - odrzucenie użytkownika
       _repository.dislikeUser(user.id).then((result) {
         if (result is Error) {

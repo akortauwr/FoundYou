@@ -8,9 +8,9 @@ part 'chat_model.g.dart';
 @freezed
 abstract class ChatModel  with _$ChatModel {
   const factory ChatModel({
-    required List<SuggestedFriendModel> friend,
-    required MessageModel lastMessage,
-    required DateTime lastMessageTime,
+    required int id,
+    required SuggestedFriendModel member,
+    @JsonKey(name: 'newest_message')  required MessageModel? newestMessage,
   }) = _ChatModel;
 
   factory ChatModel.fromJson(Map<String, Object?> json) =>

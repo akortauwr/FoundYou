@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:found_you_app/data/repositories/auth/auth_repository.dart';
 import 'package:found_you_app/data/services/api/auth_api_client.dart';
 import 'package:found_you_app/data/services/model/login_response/login_response.dart';
@@ -6,7 +7,7 @@ import 'package:found_you_app/domain/models/auth/login_request/login_request.dar
 import 'package:found_you_app/domain/models/form_field/form_field_model.dart';
 import 'package:found_you_app/utils/result.dart';
 
-class AuthRepositoryNetwork extends AuthRepository{
+class AuthRepositoryNetwork extends AuthRepository {
   final AuthApiClient _authApiClient;
   final SecureStorageService _secureStorageService;
 
@@ -67,6 +68,8 @@ class AuthRepositoryNetwork extends AuthRepository{
       case Error<void>():
         return Result.error(result.error);
       case Ok<void>():
+        _isLogged = false;
+        notifyListeners();
         return Result.ok(null);
     }
   }

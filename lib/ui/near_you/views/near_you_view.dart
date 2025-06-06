@@ -1,9 +1,11 @@
+// near_you_view.dart
+
 import 'package:flutter/material.dart';
-import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
-import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_view_data.dart';
-import 'package:found_you_app/ui/near_you/view_models/near_you_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:found_you_app/ui/common_widgets/neo_card.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
+import 'package:provider/provider.dart';
+import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
+import 'package:found_you_app/ui/near_you/view_models/near_you_view_model.dart';
 
 class NearYouView extends StatefulWidget {
   const NearYouView({Key? key}) : super(key: key);
@@ -13,123 +15,166 @@ class NearYouView extends StatefulWidget {
 }
 
 class _NearYouViewState extends State<NearYouView> {
+  final _listKey = GlobalKey<AnimatedListState>();
+  final List<SuggestedFriendModel> _localFriends = [];
+  bool _isInitialDataLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadInitialData();
+    });
+  }
+
+  Future<void> _loadInitialData() async {
+    if (!mounted) return;
+    final vm = context.read<NearYouViewModel>();
+
+    await vm.fetchSuggestedFriends();
+
+    if (!mounted) return;
+    final initialFriends = vm.suggestedFriends;
+
+    for (int i = 0; i < initialFriends.length; i++) {
+      await Future.delayed(const Duration(milliseconds: 80));
+      if (!mounted) return;
+      _localFriends.add(initialFriends[i]);
+      _listKey.currentState?.insertItem(i);
+    }
+
+    if(mounted) {
+      setState(() {
+        _isInitialDataLoaded = true;
+      });
+    }
+  }
+
+  Future<void> _handleLike(SuggestedFriendModel user, int index) async {
+    final vm = context.read<NearYouViewModel>();
+    if (vm.isLikingUser(user.id)) return;
+
+    final removedItem = _localFriends.removeAt(index);
+    _listKey.currentState?.removeItem(
+      index,
+      // Przekazujemy usunięty element do buildera animacji
+          (context, animation) => _buildAnimatingTile(removedItem, animation),
+      duration: const Duration(milliseconds: 400),
+    );
+
+    final bool success = await vm.likeUser(user.id);
+
+    if (!success && mounted) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      _localFriends.insert(index, removedItem);
+      _listKey.currentState?.insertItem(index);
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(const SnackBar(content: Text("Failed to like user. Please try again.")));
+    }
+  }
+
+  /// ZMIANA NR 1: Dodajemy klucz do widgetu animowanego.
+  Widget _buildAnimatingTile(SuggestedFriendModel user, Animation<double> animation) {
+    return SizeTransition(
+      // Klucz jest niezbędny, aby Flutter wiedział, który DOKŁADNIE element animuje.
+      key: ValueKey(user.id),
+      sizeFactor: animation,
+      child: _buildTile(user: user, onTap: () {}, backgroundColor: NeoColors.tomatoRed),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<NearYouViewModel>();
 
-    if (vm.isLoading && vm.items.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(color: Colors.black),
-      );
+    if (vm.isLoading && !_isInitialDataLoaded) {
+      return const Center(child: CircularProgressIndicator(color: Colors.black));
     }
 
-    if (!vm.isLoading && vm.items.isEmpty) {
+    if (!vm.isLoading && _localFriends.isEmpty && _isInitialDataLoaded) {
       return const Center(child: Text("No suggestions found near you."));
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text(
-            "Suggested Friends Near You",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
+        Text(
+          "Suggested Friends Near You",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
-        const SizedBox(height: 8),
-        Expanded(
-          child: ListView.builder(
-            itemCount: vm.items.length,
-            itemBuilder: (context, index) {
-              final data = vm.items[index];
-              return _buildAnimatedTile(data: data);
-            },
-          ),
+        AnimatedList(
+          key: _listKey,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          initialItemCount: _localFriends.length,
+          itemBuilder: (context, index, animation) {
+            final user = _localFriends[index];
+            return SizeTransition(
+              key: ValueKey(user.id),
+              sizeFactor: animation,
+              child: _buildTile(
+                user: user,
+                onTap: () => _handleLike(user, index),
+                backgroundColor: Colors.white, // Możesz zmienić kolor tła, jeśli chcesz
+              ),
+            );
+          },
         ),
       ],
     );
   }
 
-  Widget _buildAnimatedTile({required SuggestedFriendViewData data}) {
-    final vm = context.read<NearYouViewModel>();
+  Widget _buildTile({required SuggestedFriendModel user, required VoidCallback onTap, required backgroundColor}) {
+    final isLiking = context.watch<NearYouViewModel>().isLikingUser(user.id);
 
-    return AnimatedOpacity(
-      opacity: data.isLiked ? 0.0 : 1.0,
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-      child: AnimatedSize(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        child: data.isLiked
-            ? const SizedBox.shrink()
-            : _buildTileContent(
-          data: data,
-          onTapLike: () => vm.likeUser(data),
-        ),
-      ),
-    );
-  }
-
-  /// Teraz przyjmujemy cały SuggestedFriendViewData, nie tylko model.
-  Widget _buildTileContent({
-    required SuggestedFriendViewData data,
-    required VoidCallback onTapLike,
-  }) {
-    final user = data.model; // łatwy alias
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+    return NeoCard(
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: user.imageUrl != null && user.imageUrl!.isNotEmpty
-                ? NetworkImage(user.imageUrl!)
-                : const AssetImage('assets/images/default_avatar.png')
-            as ImageProvider,
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.black, width: 4),
+            ),
+            child: CircleAvatar(
+              radius: 24,
+              backgroundImage: user.imageUrl != null && user.imageUrl!.isNotEmpty
+                  ? NetworkImage(user.imageUrl!)
+                  : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  user.username,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                Text(user.username, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 4),
                 Text(
                   user.bio,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                  maxLines: 2,
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
           ),
           GestureDetector(
-            onTap: onTapLike,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Icon(
-                  Icons.favorite,
-                  color: data.isLiked
-                      ? NeoColors.tomatoRed
-                      : Colors.transparent,
+            onTap: onTap,
+            child: isLiking
+                ? const SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(strokeWidth: 2.0, color: Colors.black),
+            )
+                : Stack(
+                  children: [
+                     Icon(Icons.favorite, color: backgroundColor,),
+                    const Icon(Icons.favorite_border, color: Colors.black),
+                  ],
                 ),
-                const Icon(Icons.favorite_border, color: Colors.black),
-              ],
-            ),
-          ),
+          )
         ],
       ),
     );

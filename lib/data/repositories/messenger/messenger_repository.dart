@@ -17,7 +17,7 @@ abstract class MessengerRepository {
   Future<Result<List<MessageModel>>> loadMessages(int chatId);
 
   /// Sends a message in a specific chat.
-  Future<Result<void>> sendMessage(
+  Future<Result<MessageModel>> sendMessage(
     int chatId,
     String content,
   );

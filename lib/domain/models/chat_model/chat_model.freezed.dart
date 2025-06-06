@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatModel {
 
- List<SuggestedFriendModel> get friend; MessageModel get lastMessage; DateTime get lastMessageTime;
+ int get id; SuggestedFriendModel get member;@JsonKey(name: 'newest_message') MessageModel? get newestMessage;
 /// Create a copy of ChatModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $ChatModelCopyWith<ChatModel> get copyWith => _$ChatModelCopyWithImpl<ChatModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatModel&&const DeepCollectionEquality().equals(other.friend, friend)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.lastMessageTime, lastMessageTime) || other.lastMessageTime == lastMessageTime));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatModel&&(identical(other.id, id) || other.id == id)&&(identical(other.member, member) || other.member == member)&&(identical(other.newestMessage, newestMessage) || other.newestMessage == newestMessage));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(friend),lastMessage,lastMessageTime);
+int get hashCode => Object.hash(runtimeType,id,member,newestMessage);
 
 @override
 String toString() {
-  return 'ChatModel(friend: $friend, lastMessage: $lastMessage, lastMessageTime: $lastMessageTime)';
+  return 'ChatModel(id: $id, member: $member, newestMessage: $newestMessage)';
 }
 
 
@@ -49,11 +49,11 @@ abstract mixin class $ChatModelCopyWith<$Res>  {
   factory $ChatModelCopyWith(ChatModel value, $Res Function(ChatModel) _then) = _$ChatModelCopyWithImpl;
 @useResult
 $Res call({
- List<SuggestedFriendModel> friend, MessageModel lastMessage, DateTime lastMessageTime
+ int id, SuggestedFriendModel member,@JsonKey(name: 'newest_message') MessageModel? newestMessage
 });
 
 
-$MessageModelCopyWith<$Res> get lastMessage;
+$SuggestedFriendModelCopyWith<$Res> get member;$MessageModelCopyWith<$Res>? get newestMessage;
 
 }
 /// @nodoc
@@ -66,22 +66,34 @@ class _$ChatModelCopyWithImpl<$Res>
 
 /// Create a copy of ChatModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? friend = null,Object? lastMessage = null,Object? lastMessageTime = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? member = null,Object? newestMessage = freezed,}) {
   return _then(_self.copyWith(
-friend: null == friend ? _self.friend : friend // ignore: cast_nullable_to_non_nullable
-as List<SuggestedFriendModel>,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
-as MessageModel,lastMessageTime: null == lastMessageTime ? _self.lastMessageTime : lastMessageTime // ignore: cast_nullable_to_non_nullable
-as DateTime,
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,member: null == member ? _self.member : member // ignore: cast_nullable_to_non_nullable
+as SuggestedFriendModel,newestMessage: freezed == newestMessage ? _self.newestMessage : newestMessage // ignore: cast_nullable_to_non_nullable
+as MessageModel?,
   ));
 }
 /// Create a copy of ChatModel
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$MessageModelCopyWith<$Res> get lastMessage {
+$SuggestedFriendModelCopyWith<$Res> get member {
   
-  return $MessageModelCopyWith<$Res>(_self.lastMessage, (value) {
-    return _then(_self.copyWith(lastMessage: value));
+  return $SuggestedFriendModelCopyWith<$Res>(_self.member, (value) {
+    return _then(_self.copyWith(member: value));
+  });
+}/// Create a copy of ChatModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MessageModelCopyWith<$Res>? get newestMessage {
+    if (_self.newestMessage == null) {
+    return null;
+  }
+
+  return $MessageModelCopyWith<$Res>(_self.newestMessage!, (value) {
+    return _then(_self.copyWith(newestMessage: value));
   });
 }
 }
@@ -91,18 +103,12 @@ $MessageModelCopyWith<$Res> get lastMessage {
 @JsonSerializable()
 
 class _ChatModel implements ChatModel {
-  const _ChatModel({required final  List<SuggestedFriendModel> friend, required this.lastMessage, required this.lastMessageTime}): _friend = friend;
+  const _ChatModel({required this.id, required this.member, @JsonKey(name: 'newest_message') required this.newestMessage});
   factory _ChatModel.fromJson(Map<String, dynamic> json) => _$ChatModelFromJson(json);
 
- final  List<SuggestedFriendModel> _friend;
-@override List<SuggestedFriendModel> get friend {
-  if (_friend is EqualUnmodifiableListView) return _friend;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_friend);
-}
-
-@override final  MessageModel lastMessage;
-@override final  DateTime lastMessageTime;
+@override final  int id;
+@override final  SuggestedFriendModel member;
+@override@JsonKey(name: 'newest_message') final  MessageModel? newestMessage;
 
 /// Create a copy of ChatModel
 /// with the given fields replaced by the non-null parameter values.
@@ -117,16 +123,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatModel&&const DeepCollectionEquality().equals(other._friend, _friend)&&(identical(other.lastMessage, lastMessage) || other.lastMessage == lastMessage)&&(identical(other.lastMessageTime, lastMessageTime) || other.lastMessageTime == lastMessageTime));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatModel&&(identical(other.id, id) || other.id == id)&&(identical(other.member, member) || other.member == member)&&(identical(other.newestMessage, newestMessage) || other.newestMessage == newestMessage));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_friend),lastMessage,lastMessageTime);
+int get hashCode => Object.hash(runtimeType,id,member,newestMessage);
 
 @override
 String toString() {
-  return 'ChatModel(friend: $friend, lastMessage: $lastMessage, lastMessageTime: $lastMessageTime)';
+  return 'ChatModel(id: $id, member: $member, newestMessage: $newestMessage)';
 }
 
 
@@ -137,11 +143,11 @@ abstract mixin class _$ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Re
   factory _$ChatModelCopyWith(_ChatModel value, $Res Function(_ChatModel) _then) = __$ChatModelCopyWithImpl;
 @override @useResult
 $Res call({
- List<SuggestedFriendModel> friend, MessageModel lastMessage, DateTime lastMessageTime
+ int id, SuggestedFriendModel member,@JsonKey(name: 'newest_message') MessageModel? newestMessage
 });
 
 
-@override $MessageModelCopyWith<$Res> get lastMessage;
+@override $SuggestedFriendModelCopyWith<$Res> get member;@override $MessageModelCopyWith<$Res>? get newestMessage;
 
 }
 /// @nodoc
@@ -154,12 +160,12 @@ class __$ChatModelCopyWithImpl<$Res>
 
 /// Create a copy of ChatModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? friend = null,Object? lastMessage = null,Object? lastMessageTime = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? member = null,Object? newestMessage = freezed,}) {
   return _then(_ChatModel(
-friend: null == friend ? _self._friend : friend // ignore: cast_nullable_to_non_nullable
-as List<SuggestedFriendModel>,lastMessage: null == lastMessage ? _self.lastMessage : lastMessage // ignore: cast_nullable_to_non_nullable
-as MessageModel,lastMessageTime: null == lastMessageTime ? _self.lastMessageTime : lastMessageTime // ignore: cast_nullable_to_non_nullable
-as DateTime,
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int,member: null == member ? _self.member : member // ignore: cast_nullable_to_non_nullable
+as SuggestedFriendModel,newestMessage: freezed == newestMessage ? _self.newestMessage : newestMessage // ignore: cast_nullable_to_non_nullable
+as MessageModel?,
   ));
 }
 
@@ -167,10 +173,22 @@ as DateTime,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$MessageModelCopyWith<$Res> get lastMessage {
+$SuggestedFriendModelCopyWith<$Res> get member {
   
-  return $MessageModelCopyWith<$Res>(_self.lastMessage, (value) {
-    return _then(_self.copyWith(lastMessage: value));
+  return $SuggestedFriendModelCopyWith<$Res>(_self.member, (value) {
+    return _then(_self.copyWith(member: value));
+  });
+}/// Create a copy of ChatModel
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MessageModelCopyWith<$Res>? get newestMessage {
+    if (_self.newestMessage == null) {
+    return null;
+  }
+
+  return $MessageModelCopyWith<$Res>(_self.newestMessage!, (value) {
+    return _then(_self.copyWith(newestMessage: value));
   });
 }
 }

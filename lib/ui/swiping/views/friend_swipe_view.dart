@@ -12,8 +12,21 @@ import 'package:found_you_app/ui/swiping/view_models/friend_swipe_view_model.dar
 import 'package:provider/provider.dart';
 
 /// Ekran „swipe” użytkowników w stylu Tinder.
-class UserSwipeView extends StatelessWidget {
+class UserSwipeView extends StatefulWidget {
   const UserSwipeView({super.key});
+
+  @override
+  State<UserSwipeView> createState() => _UserSwipeViewState();
+}
+
+class _UserSwipeViewState extends State<UserSwipeView> {
+  final CardSwiperController _swiperController = CardSwiperController();
+
+  @override
+  void dispose() {
+    _swiperController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +46,18 @@ class UserSwipeView extends StatelessWidget {
             child: Stack(
               children: [
                 CardSwiper(
+                  controller: _swiperController,
                   key: ValueKey(viewModel.users.length),
                   cardsCount: viewModel.users.length,
                   numberOfCardsDisplayed: min(3, viewModel.users.length),
-                  onSwipe: (prevIndex, direction, _) {
+                  allowedSwipeDirection: const AllowedSwipeDirection.only(
+                    left: true,
+                    right: true,
+                  ),
+                  onSwipe: (prevIndex, currentIndex, direction) {
+                    if(direction == CardSwiperDirection.none) {
+                      return false; // No swipe action
+                    }
                     final user = viewModel.users.elementAt(prevIndex);
                     viewModel.onSwipe(user, direction);
                     return true;
@@ -56,18 +77,18 @@ class UserSwipeView extends StatelessWidget {
                       NeoIconButton(
                         child: Icon(Icons.close),
                         backgroundColor: NeoColors.tomatoRed,
-                        onPressed: () => viewModel.onSwipe(viewModel.users.last, 0),
+                        onPressed: () => _swiperController.swipe(CardSwiperDirection.left),
                         padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                       ),
                       NeoIconButton(
                         child: Stack(
                           children: [
-                            Icon(Icons.favorite, color: Colors.red, size: 32),
+                            Icon(Icons.favorite, color: Colors.white, size: 32),
                             Icon(Icons.favorite_border, color: Colors.black, size: 32),
                           ],
                         ),
                         backgroundColor: NeoColors.springGreen,
-                        onPressed: () => viewModel.onSwipe(viewModel.users.last, 1),
+                        onPressed: () => _swiperController.swipe(CardSwiperDirection.right),
                         padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                       ),
                     ],

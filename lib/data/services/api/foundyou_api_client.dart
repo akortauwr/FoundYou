@@ -94,7 +94,7 @@ class FoundYouApiClient {
     try {
       final response = await apiClient.get('/api/suggested-friends/matches/');
       if (response is List) {
-        final friends = response.map((e) => SuggestedFriendModel.fromJson(e)).toList();
+        final friends = response.map((e) => SuggestedFriendModel.fromJson(e['matched_user'])).toList();
         return Result.ok(friends);
       } else {
         return Result.error(Exception('Invalid response format'));
@@ -134,7 +134,7 @@ class FoundYouApiClient {
 
   Future<Result<void>> dislikeUser(int userId) async {
     try {
-      await apiClient.post('/api/suggested-friends/reject/$userId', {});
+      await apiClient.post('/api/suggested-friends/reject/$userId/', {});
       return Result.ok(null);
     } on DioException catch (e) {
       return Result.error(
@@ -149,7 +149,7 @@ class FoundYouApiClient {
 
   Future<Result<List<ChatModel>>> getChats() async {
   try {
-      final response = await apiClient.get('/api/chats/');
+      final response = await apiClient.get('/api/private-chat/');
       if (response is List) {
         final chats = response.map((e) => ChatModel.fromJson(e)).toList();
         return Result.ok(chats);
@@ -164,9 +164,9 @@ class FoundYouApiClient {
   Future<Result<List<MessageModel>>> getMessages(int chatId, DateTime? lastMessageTime) async {
     try {
       final queryParameters = lastMessageTime != null
-          ? {'last_message_time': lastMessageTime.toIso8601String()}
+          ? {'before': lastMessageTime.toIso8601String()}
           : null;
-      final response = await apiClient.get('/api/chats/$chatId/messages/', queryParameters: queryParameters);
+      final response = await apiClient.get('/api/private-chat/$chatId/messages/', queryParameters: queryParameters);
       if (response is List) {
         final messages = response.map((e) => MessageModel.fromJson(e)).toList();
         return Result.ok(messages);
@@ -183,10 +183,8 @@ class FoundYouApiClient {
     DateTime lastMessageTime,
   ) async {
     try {
-      final response = await apiClient.get(
-        '/api/chats/$chatId/messages/pull/',
-        queryParameters: {'last_message_time': lastMessageTime.toIso8601String()},
-      );
+      final queryParameters = {'last_check': lastMessageTime.toIso8601String()};
+      final response = await apiClient.get('/api/private-chat/$chatId/messages/', queryParameters: queryParameters);
       if (response is List) {
         final messages = response.map((e) => MessageModel.fromJson(e)).toList();
         return Result.ok(messages);
@@ -198,16 +196,16 @@ class FoundYouApiClient {
     }
   }
 
-  Future<Result<void>> sendMessage(
+  Future<Result<MessageModel>> sendMessage(
     int chatId,
     String content,
   ) async {
     try {
       final response = await apiClient.post(
-        '/api/chats/$chatId/messages/',
+        '/api/private-chat/$chatId/messages/',
         {'content': content},
       );
-     return Result.ok(null);
+     return Result.ok(MessageModel.fromJson(response));
     } catch (e) {
       return Result.error(Exception('Nie udało się wysłać wiadomości: $e'));
     }

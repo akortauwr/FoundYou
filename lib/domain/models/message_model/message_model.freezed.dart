@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MessageModel {
 
- int get id; int get senderId; String get content;@JsonKey(name: 'created_at') DateTime get createdAt;
+ int get id;@JsonKey(name: 'sender_id') int get senderId; String get content;@JsonKey(name: 'created_at') DateTime get createdAt;
 /// Create a copy of MessageModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $MessageModelCopyWith<$Res>  {
   factory $MessageModelCopyWith(MessageModel value, $Res Function(MessageModel) _then) = _$MessageModelCopyWithImpl;
 @useResult
 $Res call({
- int id, int senderId, String content,@JsonKey(name: 'created_at') DateTime createdAt
+ int id,@JsonKey(name: 'sender_id') int senderId, String content,@JsonKey(name: 'created_at') DateTime createdAt
 });
 
 
@@ -83,11 +83,11 @@ as DateTime,
 @JsonSerializable()
 
 class _MessageModel implements MessageModel {
-  const _MessageModel({required this.id, required this.senderId, required this.content, @JsonKey(name: 'created_at') required this.createdAt});
+  const _MessageModel({required this.id, @JsonKey(name: 'sender_id') required this.senderId, required this.content, @JsonKey(name: 'created_at') required this.createdAt});
   factory _MessageModel.fromJson(Map<String, dynamic> json) => _$MessageModelFromJson(json);
 
 @override final  int id;
-@override final  int senderId;
+@override@JsonKey(name: 'sender_id') final  int senderId;
 @override final  String content;
 @override@JsonKey(name: 'created_at') final  DateTime createdAt;
 
@@ -124,7 +124,7 @@ abstract mixin class _$MessageModelCopyWith<$Res> implements $MessageModelCopyWi
   factory _$MessageModelCopyWith(_MessageModel value, $Res Function(_MessageModel) _then) = __$MessageModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int senderId, String content,@JsonKey(name: 'created_at') DateTime createdAt
+ int id,@JsonKey(name: 'sender_id') int senderId, String content,@JsonKey(name: 'created_at') DateTime createdAt
 });
 
 

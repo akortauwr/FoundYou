@@ -38,7 +38,7 @@ class MessengerRepositoryNetwork extends MessengerRepository{
   }
 
   @override
-  Future<Result<void>> sendMessage(int chatId, String content) {
+  Future<Result<MessageModel>> sendMessage(int chatId, String content) {
     return apiClient.sendMessage(chatId, content);
   }
 

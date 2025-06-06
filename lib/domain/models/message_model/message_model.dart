@@ -9,7 +9,7 @@ part 'message_model.g.dart';
 abstract class MessageModel  with _$MessageModel {
   const factory MessageModel({
     required int id,
-    required int senderId,
+    @JsonKey(name: 'sender_id') required int senderId,
     required String content,
     @JsonKey(name: 'created_at') required DateTime createdAt,
   }) = _MessageModel;

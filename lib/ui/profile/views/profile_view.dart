@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:found_you_app/domain/models/user_model/user_model.dart';
+import 'package:found_you_app/routing/paths.dart';
 import 'package:found_you_app/ui/common_widgets/neo_card.dart';
 import 'package:found_you_app/ui/common_widgets/neo_icon_buttons.dart';
 import 'package:found_you_app/ui/common_widgets/neo_select_display.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 import 'package:found_you_app/ui/profile/view_models/profile_view_model.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class ProfileView extends StatelessWidget {
@@ -44,8 +46,8 @@ class ProfileView extends StatelessWidget {
                 onChangePassword: () => {},
                 onLogout: () {
                   // Logika wylogowania
-                  // vm.logout();
-                  Navigator.pushNamed(context, '/login');
+                  vm.logout();
+                  context.go(Paths.login); // Przekierowanie do ekranu logowania
                 },
                 onTermsOfService: () {
                   // Logika regulaminu

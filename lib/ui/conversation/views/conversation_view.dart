@@ -3,22 +3,22 @@ import 'package:found_you_app/ui/common_widgets/neo_card.dart';
 import 'package:found_you_app/ui/common_widgets/neo_icon_buttons.dart';
 import 'package:found_you_app/ui/common_widgets/neo_text_field.dart';
 import 'package:provider/provider.dart';
-import '../view_models/chat_view_model.dart';
+import '../view_models/conversation_view_model.dart';
 
-class ChatView extends StatefulWidget {
-  const ChatView({super.key});
+class ConversationView extends StatefulWidget {
+  const ConversationView({super.key});
 
   @override
-  _ChatViewState createState() => _ChatViewState();
+  _ConversationViewState createState() => _ConversationViewState();
 }
 
-class _ChatViewState extends State<ChatView> {
+class _ConversationViewState extends State<ConversationView> {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<ChatViewModel>();
+    final vm = context.watch<ConversationViewModel>();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Rozmowa')),
@@ -36,7 +36,7 @@ class _ChatViewState extends State<ChatView> {
                 itemCount: vm.messages.length,
                 itemBuilder: (context, index) {
                   final msg = vm.messages[index];
-                  final isMe = msg.senderId == ChatViewModel.currentUserId;
+                  final isMe = vm.isCurrentUser(msg.senderId);
 
                   return Align(
                     alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,

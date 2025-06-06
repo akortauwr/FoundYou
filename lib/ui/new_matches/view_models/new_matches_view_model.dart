@@ -28,6 +28,7 @@ class NewMatchesViewModel extends ChangeNotifier {
     (result) {
       case Ok<List<SuggestedFriendModel>> ok:
         _suggestedFriends = ok.value;
+        print('\n\n\n\ Suggested friends fetched: ${_suggestedFriends.length}');
         break;
       case Error error:
         // Handle error, e.g., show a snackbar or dialog
