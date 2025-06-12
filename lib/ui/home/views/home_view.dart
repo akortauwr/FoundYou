@@ -24,10 +24,11 @@ class HomeView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 32.0),
       child: Column(
         children: [
+          SizedBox(height: 24),
           NewMatchesView(),
-          SizedBox(height: 16),
+          SizedBox(height: 24),
           RecentLikesView(),
-          SizedBox(height: 16),
+          SizedBox(height: 24),
           NearYouView(),
         ],
       ),

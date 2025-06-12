@@ -17,6 +17,7 @@ class SecureStorageService {
   static const _userLogin = 'user_login';
   static const _userPassword = 'user_password';
   static const _userRememberMe = 'user_remember_me';
+  static const _userId = 'user_id';
 
   Future<Result<T?>> fetch<T>(String key) async {
     try {
@@ -102,4 +103,10 @@ class SecureStorageService {
   Future<Result<void>> saveUserRememberMe(bool rememberMe) => save<bool>(_userRememberMe, rememberMe);
 
   Future<Result<void>> deleteUserRememberMe() => delete(_userRememberMe);
+
+  Future<Result<int?>> fetchUserId() => fetch<int?>(_userId);
+
+  Future<Result<void>> saveUserId(int? userId) => save<int?>(_userId, userId);
+
+  Future<Result<void>> deleteUserId() => delete(_userId);
 }

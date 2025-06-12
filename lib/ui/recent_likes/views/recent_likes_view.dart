@@ -17,34 +17,42 @@ class RecentLikesView extends StatelessWidget {
     }
 
     if (vm.suggestedFriends.isEmpty) {
-      return const Center(child: Text("No recent likes found."));
+      return const Center(child: Text("Brak nowych polubień.",
+          style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+      ),));
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text(
-            "Recent Likes",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+        Text(
+          "Nowe polubienia",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
         // Załóżmy, że NeoCardRecentLikes przyjmuje SuggestedFriendModel jako „like”
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: vm.suggestedFriends.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 12),
-          itemBuilder: (context, index) {
-            final friend = vm.suggestedFriends[index];
-            return NeoCardRecentLikes(friend: friend);
-          },
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        SizedBox(
+          height: 184, // Ustaw wysokość, aby dopasować do Twoich potrzeb
+          child: ListView.separated(
+           scrollDirection: Axis.horizontal,
+            itemCount: vm.suggestedFriends.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              final friend = vm.suggestedFriends[index];
+              return NeoCardRecentLikes(friend: friend,
+                onTap: () {
+                  vm.likeUser(friend.id);
+                },
+              );
+            },
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          ),
         ),
       ],
     );

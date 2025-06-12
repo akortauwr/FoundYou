@@ -17,18 +17,12 @@ abstract class UserModel with _$UserModel {
     @JsonKey(name: 'image_url')
     String? imageUrl,
 
-    @JsonKey(name: 'owned_events')
-    required List<dynamic> ownedEvents,
-
-    @JsonKey(name: 'participated_events')
-    required List<dynamic> participatedEvents,
-
     required List<String> passions,
 
     @JsonKey(name: 'created_at')
     required DateTime createdAt,
 
-    @JsonKey(name: 'friend_count')
+    @JsonKey(name: 'match_count')
     required int friendCount,
 
     required String sex,

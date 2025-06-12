@@ -5,6 +5,7 @@ import 'package:found_you_app/ui/common_widgets/neo_button.dart';
 import 'package:found_you_app/ui/common_widgets/neo_card.dart';
 import 'package:found_you_app/ui/common_widgets/neo_icon_buttons.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class RegisterFormPageView extends StatefulWidget {
@@ -30,6 +31,9 @@ class _RegisterFormPageViewState extends State<RegisterFormPageView> {
   }
 
   void previousPage() {
+    if(_currentPage == 0){
+      context.pop();
+    }
     if (_currentPage > 0) {
       _pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
     }

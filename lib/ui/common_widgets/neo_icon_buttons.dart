@@ -10,6 +10,8 @@ class NeoIconButton extends StatefulWidget {
   final EdgeInsets padding;
   final double borderWidth;
   final BorderRadiusGeometry? borderRadius;
+  final double? width;
+  final double? height;
 
   const NeoIconButton({
     super.key,
@@ -21,6 +23,8 @@ class NeoIconButton extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
     this.borderWidth = 4.0,
     this.borderRadius,
+    this.width,
+    this.height,
 
   });
 
@@ -62,6 +66,8 @@ class _NeoIconButtonState extends State<NeoIconButton> {
       onTapUp: _handleTapUp,
       onTapCancel: _handleTapCancel,
       child: AnimatedContainer(
+        width: widget.width,
+        height: widget.height,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(

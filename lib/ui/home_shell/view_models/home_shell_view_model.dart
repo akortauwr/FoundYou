@@ -15,7 +15,7 @@ class HomeShellViewModel extends ChangeNotifier {
     final map = {
       Paths.home: 0,
       Paths.swipe: 1,
-      Paths.conversations: 2,
+      Paths.chats: 2,
       Paths.profile: 3,
     };
     final idx = map[loc] ?? 0;

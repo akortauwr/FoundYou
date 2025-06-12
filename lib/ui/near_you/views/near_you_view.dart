@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:found_you_app/ui/common_widgets/neo_card.dart';
+import 'package:found_you_app/ui/common_widgets/neo_friend_profile.dart';
+import 'package:found_you_app/ui/common_widgets/neo_icon_buttons.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
@@ -94,14 +96,15 @@ class _NearYouViewState extends State<NearYouView> {
     }
 
     if (!vm.isLoading && _localFriends.isEmpty && _isInitialDataLoaded) {
-      return const Center(child: Text("No suggestions found near you."));
+      return const Center(child: Text("Brak użytkowników w pobliżu.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),));
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "Suggested Friends Near You",
+          "Blisko ciebie",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         AnimatedList(
@@ -129,53 +132,68 @@ class _NearYouViewState extends State<NearYouView> {
   Widget _buildTile({required SuggestedFriendModel user, required VoidCallback onTap, required backgroundColor}) {
     final isLiking = context.watch<NearYouViewModel>().isLikingUser(user.id);
 
-    return NeoCard(
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.black, width: 4),
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 64.0),
+                child: NeoFriendProfile(user: user),
+              ),
+            );
+          },
+        );
+      },
+      child: NeoCard(
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.black, width: 4),
+              ),
+              child: CircleAvatar(
+                radius: 24,
+                backgroundImage: user.imageUrl != null && user.imageUrl!.isNotEmpty
+                    ? NetworkImage(user.imageUrl!)
+                    : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+              ),
             ),
-            child: CircleAvatar(
-              radius: 24,
-              backgroundImage: user.imageUrl != null && user.imageUrl!.isNotEmpty
-                  ? NetworkImage(user.imageUrl!)
-                  : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(user.username, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  const SizedBox(height: 4),
+                  Text(
+                    user.bio,
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(user.username, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 4),
-                Text(
-                  user.bio,
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: onTap,
-            child: isLiking
-                ? const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(strokeWidth: 2.0, color: Colors.black),
+            GestureDetector(
+              onTap: onTap,
+              child: isLiking
+                  ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2.0, color: Colors.black),
+              )
+                  : Stack(
+                    children: [
+                       Icon(Icons.favorite, color: backgroundColor,),
+                      const Icon(Icons.favorite_border, color: Colors.black),
+                    ],
+                  ),
             )
-                : Stack(
-                  children: [
-                     Icon(Icons.favorite, color: backgroundColor,),
-                    const Icon(Icons.favorite_border, color: Colors.black),
-                  ],
-                ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

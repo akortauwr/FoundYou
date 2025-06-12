@@ -36,7 +36,7 @@ class HomeShellView extends StatelessWidget {
               context.go(Paths.swipe);
               break;
             case 2:
-              context.go(Paths.conversations);
+              context.go(Paths.chats);
               break;
             case 3:
               context.go(Paths.profile);

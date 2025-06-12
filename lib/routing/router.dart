@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:found_you_app/data/repositories/auth/auth_repository.dart';
 import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
+import 'package:found_you_app/domain/models/user_model/user_model.dart';
+import 'package:found_you_app/ui/auth/edit_data/view_models/edit_data_view_model.dart';
+import 'package:found_you_app/ui/auth/edit_data/views/edit_data_view.dart';
 import 'package:found_you_app/ui/auth/login/view_models/login_view_model.dart';
 import 'package:found_you_app/ui/auth/login/widgets/login_view.dart';
 import 'package:found_you_app/ui/auth/register/view_models/register_form_view_model.dart';
@@ -57,7 +60,7 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
               child: MultiProvider(
                 providers: [
                   ChangeNotifierProvider<NewMatchesViewModel>(
-                    create: (_) => NewMatchesViewModel(repository: ctx.read()),
+                    create: (_) => NewMatchesViewModel(repository: ctx.read(), messengerRepository: ctx.read()),
                   ),
                   ChangeNotifierProvider<RecentLikesViewModel>(
                     create: (_) => RecentLikesViewModel(repository: ctx.read()),
@@ -107,14 +110,60 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
                   child: ProfileView(),
                 ),
               ),
+          routes: [
+            GoRoute(
+              path: Paths.editData, // Ścieżka względna do profilu, np. /profile/edit-data
+              name: 'editData',
+              builder: (context, state) {
+                // KROK 1: Odbierz obiekt UserModel z parametru 'extra'
+                // Rzutujemy go na typ UserModel, ponieważ wiemy, co przekazaliśmy.
+                final user = state.extra as UserModel;
+
+                // KROK 2: Przekaż odebrany obiekt do ViewModelu
+                return ChangeNotifierProvider(
+                  create: (ctx) => EditDataViewModel(
+                    authRepository: ctx.read(),
+                    initialUser: user, // <-- Używamy przekazanego użytkownika zamiast null!
+                  )..loadForm(), // Od razu ładujemy i inicjalizujemy formularz
+                  child: const EditDataView(),
+                );
+              },
+            ),
+          ]
         ),
         GoRoute(
-          path: Paths.conversations,
-          builder:
-              (context, state) => ChangeNotifierProvider(
-                create: (_) => ChatsViewModel(messengerRepository: context.read()),
-                child: const ChatsView(),
+          path: Paths.chats, // czyli '/chats'
+          name: 'chats', // Dodajemy nazwę dla spójności
+          pageBuilder:
+              (context, state) => NoTransitionPage(
+                // Używamy pageBuilder, by nie było animacji między zakładkami
+                child: ChangeNotifierProvider(
+                  create: (_) => ChatsViewModel(messengerRepository: context.read()),
+                  child: const ChatsView(),
+                ),
               ),
+          routes: [
+            // Zagnieżdżamy trasę konwersacji jako "dziecko" listy czatów
+            GoRoute(
+              // --- ZMIANA 2: Ścieżka jest teraz WZGLĘDNA (bez '/' na początku) ---
+              path: 'conversation/:chatId',
+              name: 'conversation', // Dajemy jej nazwę, np. 'conversation'
+              builder: (context, state) {
+                // --- ZMIANA 3: Poprawiamy nazwę parametru na 'chatId' ---
+                final chatId = int.parse(state.pathParameters['chatId']!);
+                final chatPartner = state.extra as SuggestedFriendModel;
+                return ChangeNotifierProvider(
+                  create:
+                      (_) => ConversationViewModel(
+                        chatId: chatId,
+                        messengerRepository: context.read(),
+                        chatPartner: chatPartner,
+                      ),
+                  child: const ConversationView(),
+                );
+              },
+            ),
+          ],
         ),
       ],
     ),
@@ -131,40 +180,33 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
     ),
     GoRoute(
       path: Paths.resetPassword,
-      name: 'reset',
-      builder: (context, state) => ResetPasswordView(viewModel: ResetPasswordViewModel(authRepository: context.read())),
+      name: 'resetPassword',
+      builder:
+          (context, state) => ChangeNotifierProvider(
+            create: (ctx) => ResetPasswordViewModel(authRepository: ctx.read()),
+            child: ResetPasswordView(),
+          ),
     ),
-    GoRoute(path: Paths.register, name: 'register', builder: (context, state) => const RegisterView()),
-    GoRoute(
-      path: Paths.registerForm,
-      name: 'registerForm',
-      builder: (context, state) {
-        final args = state.extra as Map<String, dynamic>;
-        return ChangeNotifierProvider(
-          create:
-              (_) =>
-                  RegisterFormViewModel(authRepository: context.read())
-                    ..updateField('email', args['email'])
-                    ..updateField('password', args['password'])
-                    ..loadForm(),
-          child: const RegisterFormPageView(),
-        );
-      },
-    ),
+    GoRoute(path: Paths.register, name: 'register', builder: (context, state) => const RegisterView(), routes: [
+      GoRoute(
+        path: Paths.registerForm,
+        name: 'registerForm',
+        builder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          return ChangeNotifierProvider(
+            create:
+                (_) =>
+            RegisterFormViewModel(authRepository: context.read())
+              ..updateField('email', args['email'])
+              ..updateField('password', args['password'])
+              ..loadForm(),
+            child: const RegisterFormPageView(),
+          );
+        },
+      ),
+    ]),
+
     GoRoute(path: Paths.test, name: 'test', builder: (context, state) => const Test1View()),
-    GoRoute(
-      path: '/chat/:chatId',
-      builder: (context, state) {
-        final chatId = int.parse(state.pathParameters['chatId']!);
-        final chatPartner = state.extra as SuggestedFriendModel;
-        return ChangeNotifierProvider(
-          create:
-              (_) =>
-                  ConversationViewModel(chatId: chatId, messengerRepository: context.read(), chatPartner: chatPartner),
-          child: const ConversationView(),
-        );
-      },
-    ),
   ],
 );
 
@@ -173,7 +215,7 @@ Future<String?> _redirect(BuildContext context, GoRouterState state) async {
   final isLoggingPage = state.matchedLocation == Paths.login;
   final isResetPasswordPage = state.matchedLocation == Paths.resetPassword;
   final isRegisterPage = state.matchedLocation == Paths.register;
-  final isRegisterFormPage = state.matchedLocation == Paths.registerForm;
+  final isRegisterFormPage = state.matchedLocation == '/register/register-form';
 
   if (!loggedIn && !isResetPasswordPage && !isRegisterPage && !isRegisterFormPage) {
     return Paths.login;

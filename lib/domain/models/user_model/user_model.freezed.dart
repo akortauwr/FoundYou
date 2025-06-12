@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserModel {
 
- int get id; String get email; String get username; DateTime get birthday; String get bio;@JsonKey(name: 'image_url') String? get imageUrl;@JsonKey(name: 'owned_events') List<dynamic> get ownedEvents;@JsonKey(name: 'participated_events') List<dynamic> get participatedEvents; List<String> get passions;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'friend_count') int get friendCount; String get sex;
+ int get id; String get email; String get username; DateTime get birthday; String get bio;@JsonKey(name: 'image_url') String? get imageUrl; List<String> get passions;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'match_count') int get friendCount; String get sex;
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $UserModelCopyWith<UserModel> get copyWith => _$UserModelCopyWithImpl<UserModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&(identical(other.birthday, birthday) || other.birthday == birthday)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&const DeepCollectionEquality().equals(other.ownedEvents, ownedEvents)&&const DeepCollectionEquality().equals(other.participatedEvents, participatedEvents)&&const DeepCollectionEquality().equals(other.passions, passions)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.friendCount, friendCount) || other.friendCount == friendCount)&&(identical(other.sex, sex) || other.sex == sex));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&(identical(other.birthday, birthday) || other.birthday == birthday)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&const DeepCollectionEquality().equals(other.passions, passions)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.friendCount, friendCount) || other.friendCount == friendCount)&&(identical(other.sex, sex) || other.sex == sex));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,email,username,birthday,bio,imageUrl,const DeepCollectionEquality().hash(ownedEvents),const DeepCollectionEquality().hash(participatedEvents),const DeepCollectionEquality().hash(passions),createdAt,friendCount,sex);
+int get hashCode => Object.hash(runtimeType,id,email,username,birthday,bio,imageUrl,const DeepCollectionEquality().hash(passions),createdAt,friendCount,sex);
 
 @override
 String toString() {
-  return 'UserModel(id: $id, email: $email, username: $username, birthday: $birthday, bio: $bio, imageUrl: $imageUrl, ownedEvents: $ownedEvents, participatedEvents: $participatedEvents, passions: $passions, createdAt: $createdAt, friendCount: $friendCount, sex: $sex)';
+  return 'UserModel(id: $id, email: $email, username: $username, birthday: $birthday, bio: $bio, imageUrl: $imageUrl, passions: $passions, createdAt: $createdAt, friendCount: $friendCount, sex: $sex)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $UserModelCopyWith<$Res>  {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) _then) = _$UserModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String email, String username, DateTime birthday, String bio,@JsonKey(name: 'image_url') String? imageUrl,@JsonKey(name: 'owned_events') List<dynamic> ownedEvents,@JsonKey(name: 'participated_events') List<dynamic> participatedEvents, List<String> passions,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'friend_count') int friendCount, String sex
+ int id, String email, String username, DateTime birthday, String bio,@JsonKey(name: 'image_url') String? imageUrl, List<String> passions,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'match_count') int friendCount, String sex
 });
 
 
@@ -66,7 +66,7 @@ class _$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? email = null,Object? username = null,Object? birthday = null,Object? bio = null,Object? imageUrl = freezed,Object? ownedEvents = null,Object? participatedEvents = null,Object? passions = null,Object? createdAt = null,Object? friendCount = null,Object? sex = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? email = null,Object? username = null,Object? birthday = null,Object? bio = null,Object? imageUrl = freezed,Object? passions = null,Object? createdAt = null,Object? friendCount = null,Object? sex = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -74,9 +74,7 @@ as String,username: null == username ? _self.username : username // ignore: cast
 as String,birthday: null == birthday ? _self.birthday : birthday // ignore: cast_nullable_to_non_nullable
 as DateTime,bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
 as String,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
-as String?,ownedEvents: null == ownedEvents ? _self.ownedEvents : ownedEvents // ignore: cast_nullable_to_non_nullable
-as List<dynamic>,participatedEvents: null == participatedEvents ? _self.participatedEvents : participatedEvents // ignore: cast_nullable_to_non_nullable
-as List<dynamic>,passions: null == passions ? _self.passions : passions // ignore: cast_nullable_to_non_nullable
+as String?,passions: null == passions ? _self.passions : passions // ignore: cast_nullable_to_non_nullable
 as List<String>,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,friendCount: null == friendCount ? _self.friendCount : friendCount // ignore: cast_nullable_to_non_nullable
 as int,sex: null == sex ? _self.sex : sex // ignore: cast_nullable_to_non_nullable
@@ -91,7 +89,7 @@ as String,
 
 @JsonSerializable(checked: true)
 class _UserModel implements UserModel {
-  const _UserModel({required this.id, required this.email, required this.username, required this.birthday, required this.bio, @JsonKey(name: 'image_url') this.imageUrl, @JsonKey(name: 'owned_events') required final  List<dynamic> ownedEvents, @JsonKey(name: 'participated_events') required final  List<dynamic> participatedEvents, required final  List<String> passions, @JsonKey(name: 'created_at') required this.createdAt, @JsonKey(name: 'friend_count') required this.friendCount, required this.sex}): _ownedEvents = ownedEvents,_participatedEvents = participatedEvents,_passions = passions;
+  const _UserModel({required this.id, required this.email, required this.username, required this.birthday, required this.bio, @JsonKey(name: 'image_url') this.imageUrl, required final  List<String> passions, @JsonKey(name: 'created_at') required this.createdAt, @JsonKey(name: 'match_count') required this.friendCount, required this.sex}): _passions = passions;
   factory _UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
 @override final  int id;
@@ -100,20 +98,6 @@ class _UserModel implements UserModel {
 @override final  DateTime birthday;
 @override final  String bio;
 @override@JsonKey(name: 'image_url') final  String? imageUrl;
- final  List<dynamic> _ownedEvents;
-@override@JsonKey(name: 'owned_events') List<dynamic> get ownedEvents {
-  if (_ownedEvents is EqualUnmodifiableListView) return _ownedEvents;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_ownedEvents);
-}
-
- final  List<dynamic> _participatedEvents;
-@override@JsonKey(name: 'participated_events') List<dynamic> get participatedEvents {
-  if (_participatedEvents is EqualUnmodifiableListView) return _participatedEvents;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_participatedEvents);
-}
-
  final  List<String> _passions;
 @override List<String> get passions {
   if (_passions is EqualUnmodifiableListView) return _passions;
@@ -122,7 +106,7 @@ class _UserModel implements UserModel {
 }
 
 @override@JsonKey(name: 'created_at') final  DateTime createdAt;
-@override@JsonKey(name: 'friend_count') final  int friendCount;
+@override@JsonKey(name: 'match_count') final  int friendCount;
 @override final  String sex;
 
 /// Create a copy of UserModel
@@ -138,16 +122,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&(identical(other.birthday, birthday) || other.birthday == birthday)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&const DeepCollectionEquality().equals(other._ownedEvents, _ownedEvents)&&const DeepCollectionEquality().equals(other._participatedEvents, _participatedEvents)&&const DeepCollectionEquality().equals(other._passions, _passions)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.friendCount, friendCount) || other.friendCount == friendCount)&&(identical(other.sex, sex) || other.sex == sex));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&(identical(other.birthday, birthday) || other.birthday == birthday)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&const DeepCollectionEquality().equals(other._passions, _passions)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.friendCount, friendCount) || other.friendCount == friendCount)&&(identical(other.sex, sex) || other.sex == sex));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,email,username,birthday,bio,imageUrl,const DeepCollectionEquality().hash(_ownedEvents),const DeepCollectionEquality().hash(_participatedEvents),const DeepCollectionEquality().hash(_passions),createdAt,friendCount,sex);
+int get hashCode => Object.hash(runtimeType,id,email,username,birthday,bio,imageUrl,const DeepCollectionEquality().hash(_passions),createdAt,friendCount,sex);
 
 @override
 String toString() {
-  return 'UserModel(id: $id, email: $email, username: $username, birthday: $birthday, bio: $bio, imageUrl: $imageUrl, ownedEvents: $ownedEvents, participatedEvents: $participatedEvents, passions: $passions, createdAt: $createdAt, friendCount: $friendCount, sex: $sex)';
+  return 'UserModel(id: $id, email: $email, username: $username, birthday: $birthday, bio: $bio, imageUrl: $imageUrl, passions: $passions, createdAt: $createdAt, friendCount: $friendCount, sex: $sex)';
 }
 
 
@@ -158,7 +142,7 @@ abstract mixin class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Re
   factory _$UserModelCopyWith(_UserModel value, $Res Function(_UserModel) _then) = __$UserModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String email, String username, DateTime birthday, String bio,@JsonKey(name: 'image_url') String? imageUrl,@JsonKey(name: 'owned_events') List<dynamic> ownedEvents,@JsonKey(name: 'participated_events') List<dynamic> participatedEvents, List<String> passions,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'friend_count') int friendCount, String sex
+ int id, String email, String username, DateTime birthday, String bio,@JsonKey(name: 'image_url') String? imageUrl, List<String> passions,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'match_count') int friendCount, String sex
 });
 
 
@@ -175,7 +159,7 @@ class __$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? email = null,Object? username = null,Object? birthday = null,Object? bio = null,Object? imageUrl = freezed,Object? ownedEvents = null,Object? participatedEvents = null,Object? passions = null,Object? createdAt = null,Object? friendCount = null,Object? sex = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? email = null,Object? username = null,Object? birthday = null,Object? bio = null,Object? imageUrl = freezed,Object? passions = null,Object? createdAt = null,Object? friendCount = null,Object? sex = null,}) {
   return _then(_UserModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -183,9 +167,7 @@ as String,username: null == username ? _self.username : username // ignore: cast
 as String,birthday: null == birthday ? _self.birthday : birthday // ignore: cast_nullable_to_non_nullable
 as DateTime,bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
 as String,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
-as String?,ownedEvents: null == ownedEvents ? _self._ownedEvents : ownedEvents // ignore: cast_nullable_to_non_nullable
-as List<dynamic>,participatedEvents: null == participatedEvents ? _self._participatedEvents : participatedEvents // ignore: cast_nullable_to_non_nullable
-as List<dynamic>,passions: null == passions ? _self._passions : passions // ignore: cast_nullable_to_non_nullable
+as String?,passions: null == passions ? _self._passions : passions // ignore: cast_nullable_to_non_nullable
 as List<String>,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,friendCount: null == friendCount ? _self.friendCount : friendCount // ignore: cast_nullable_to_non_nullable
 as int,sex: null == sex ? _self.sex : sex // ignore: cast_nullable_to_non_nullable

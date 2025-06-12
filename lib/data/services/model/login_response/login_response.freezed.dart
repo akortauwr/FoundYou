@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoginResponse {
 
- String get refresh; String get access;
+ String get refresh; String get access;@JsonKey(name: 'user_id') int get userId;
 /// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $LoginResponseCopyWith<LoginResponse> get copyWith => _$LoginResponseCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginResponse&&(identical(other.refresh, refresh) || other.refresh == refresh)&&(identical(other.access, access) || other.access == access));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginResponse&&(identical(other.refresh, refresh) || other.refresh == refresh)&&(identical(other.access, access) || other.access == access)&&(identical(other.userId, userId) || other.userId == userId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,refresh,access);
+int get hashCode => Object.hash(runtimeType,refresh,access,userId);
 
 @override
 String toString() {
-  return 'LoginResponse(refresh: $refresh, access: $access)';
+  return 'LoginResponse(refresh: $refresh, access: $access, userId: $userId)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $LoginResponseCopyWith<$Res>  {
   factory $LoginResponseCopyWith(LoginResponse value, $Res Function(LoginResponse) _then) = _$LoginResponseCopyWithImpl;
 @useResult
 $Res call({
- String refresh, String access
+ String refresh, String access,@JsonKey(name: 'user_id') int userId
 });
 
 
@@ -66,11 +66,12 @@ class _$LoginResponseCopyWithImpl<$Res>
 
 /// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? refresh = null,Object? access = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? refresh = null,Object? access = null,Object? userId = null,}) {
   return _then(_self.copyWith(
 refresh: null == refresh ? _self.refresh : refresh // ignore: cast_nullable_to_non_nullable
 as String,access: null == access ? _self.access : access // ignore: cast_nullable_to_non_nullable
-as String,
+as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -81,11 +82,12 @@ as String,
 @JsonSerializable()
 
 class _LoginResponse implements LoginResponse {
-  const _LoginResponse({required this.refresh, required this.access});
+  const _LoginResponse({required this.refresh, required this.access, @JsonKey(name: 'user_id') required this.userId});
   factory _LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
 
 @override final  String refresh;
 @override final  String access;
+@override@JsonKey(name: 'user_id') final  int userId;
 
 /// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -100,16 +102,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginResponse&&(identical(other.refresh, refresh) || other.refresh == refresh)&&(identical(other.access, access) || other.access == access));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginResponse&&(identical(other.refresh, refresh) || other.refresh == refresh)&&(identical(other.access, access) || other.access == access)&&(identical(other.userId, userId) || other.userId == userId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,refresh,access);
+int get hashCode => Object.hash(runtimeType,refresh,access,userId);
 
 @override
 String toString() {
-  return 'LoginResponse(refresh: $refresh, access: $access)';
+  return 'LoginResponse(refresh: $refresh, access: $access, userId: $userId)';
 }
 
 
@@ -120,7 +122,7 @@ abstract mixin class _$LoginResponseCopyWith<$Res> implements $LoginResponseCopy
   factory _$LoginResponseCopyWith(_LoginResponse value, $Res Function(_LoginResponse) _then) = __$LoginResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String refresh, String access
+ String refresh, String access,@JsonKey(name: 'user_id') int userId
 });
 
 
@@ -137,11 +139,12 @@ class __$LoginResponseCopyWithImpl<$Res>
 
 /// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? refresh = null,Object? access = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? refresh = null,Object? access = null,Object? userId = null,}) {
   return _then(_LoginResponse(
 refresh: null == refresh ? _self.refresh : refresh // ignore: cast_nullable_to_non_nullable
 as String,access: null == access ? _self.access : access // ignore: cast_nullable_to_non_nullable
-as String,
+as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

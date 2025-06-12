@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:found_you_app/ui/common_widgets/neo_app_bar.dart';
 import 'package:found_you_app/ui/common_widgets/neo_card.dart';
 import 'package:found_you_app/ui/common_widgets/neo_icon_buttons.dart';
 import 'package:found_you_app/ui/common_widgets/neo_text_field.dart';
@@ -21,7 +22,7 @@ class _ConversationViewState extends State<ConversationView> {
     final vm = context.watch<ConversationViewModel>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Rozmowa')),
+      appBar: NeoAppBar(text: vm.chatPartner.username),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
@@ -42,16 +43,13 @@ class _ConversationViewState extends State<ConversationView> {
                     alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                     child: NeoCard(
                       color: isMe ? Colors.blue[100]! : Colors.grey[200]!,
-                      borderRadius: isMe? BorderRadius.only(
-                        topRight: Radius.circular(12),
-                        bottomLeft: Radius.circular(12),
-                      ) : BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        bottomRight: Radius.circular(12),
-                      ),
+                      borderRadius:
+                          isMe
+                              ? BorderRadius.only(topRight: Radius.circular(12), bottomLeft: Radius.circular(12))
+                              : BorderRadius.only(topLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
                       child: Padding(
                         padding: EdgeInsets.all(10),
-                        child: Text(msg.content, style: TextStyle(fontWeight: FontWeight.w600),),
+                        child: Text(msg.content, style: TextStyle(fontWeight: FontWeight.w600)),
                       ),
                     ),
                   );
@@ -62,12 +60,7 @@ class _ConversationViewState extends State<ConversationView> {
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
               child: Row(
                 children: [
-                  Expanded(
-                    child: NeoTextField(
-                      controller: _controller,
-                      label: 'Wiadomość',
-                    ),
-                  ),
+                  Expanded(child: NeoTextField(controller: _controller, label: 'Wiadomość')),
                   NeoIconButton(
                     child: Icon(Icons.send),
                     onPressed: () {

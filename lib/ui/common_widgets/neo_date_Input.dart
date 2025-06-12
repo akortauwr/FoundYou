@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 
-/// Ensures each new digit replaces the old one.
 class SingleDigitTextInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
@@ -19,35 +18,40 @@ class SingleDigitTextInputFormatter extends TextInputFormatter {
   }
 }
 
-/// A neobrutalist style DOB input with 8 separate digit fields,
-/// laid out as:
-///   [ ][ ] - [ ][ ]
-///   [ ][ ][ ][ ]
+/// A neobrutalist style DOB input with 8 separate digit fields.
 class NeoDateInput extends StatefulWidget {
   final ValueChanged<String> onChanged;
-  const NeoDateInput({Key? key, required this.onChanged}) : super(key: key);
+  final String? initialValue; // Accepts an initial value to populate fields
+
+  const NeoDateInput({Key? key, required this.onChanged, this.initialValue}) : super(key: key);
 
   @override
   _NeoDateInputState createState() => _NeoDateInputState();
 }
 
 class _NeoDateInputState extends State<NeoDateInput> {
-  final _controllers      = List.generate(8, (_) => TextEditingController());
-  final _fieldNodes       = List.generate(8, (_) => FocusNode());
+  final _controllers = List.generate(8, (_) => TextEditingController());
+  final _fieldNodes = List.generate(8, (_) => FocusNode());
   final _keyListenerNodes = List.generate(8, (_) => FocusNode());
-  final _bgColors         = List<Color?>.filled(8, null);
+  final _bgColors = List<Color?>.filled(8, null);
 
   @override
   void initState() {
     super.initState();
+    // Populate controllers with the initial value if provided
+    if (widget.initialValue != null && widget.initialValue!.length == 8) {
+      for (int i = 0; i < 8; i++) {
+        _controllers[i].text = widget.initialValue![i];
+      }
+    }
+
     for (int i = 0; i < 8; i++) {
       _fieldNodes[i].addListener(() {
         setState(() {
-          _bgColors[i] = _fieldNodes[i].hasFocus
-              ? NeoColors.randomPastel()
-              : null;
+          _bgColors[i] = _fieldNodes[i].hasFocus ? NeoColors.randomPastel() : null;
         });
       });
+      // This listener reports the full string back on any change
       _controllers[i].addListener(() {
         widget.onChanged(_controllers.map((c) => c.text).join());
       });
@@ -64,9 +68,7 @@ class _NeoDateInputState extends State<NeoDateInput> {
 
   Widget _buildBox(int index, String label) {
     final focused = _fieldNodes[index].hasFocus;
-    final content = _controllers[index].text.isNotEmpty
-        ? _controllers[index].text
-        : (!focused ? label : '');
+    final content = _controllers[index].text.isNotEmpty ? _controllers[index].text : (!focused ? label : '');
     final offset = focused ? const Offset(0.5, 0.5) : const Offset(3, 3);
 
     return GestureDetector(
@@ -89,17 +91,13 @@ class _NeoDateInputState extends State<NeoDateInput> {
             if (event is RawKeyDownEvent) {
               final key = event.logicalKey.keyLabel;
               if (RegExp(r'^[0-9]$').hasMatch(key)) {
-                // overwrite even same digit
                 _controllers[index].text = key;
-                _controllers[index].selection =
-                const TextSelection.collapsed(offset: 1);
+                _controllers[index].selection = const TextSelection.collapsed(offset: 1);
                 widget.onChanged(_controllers.map((c) => c.text).join());
 
                 if (index < 7) {
-                  // move focus to next
                   _fieldNodes[index + 1].requestFocus();
                 } else {
-                  // last digit entered: unfocus all fields
                   FocusScope.of(context).unfocus();
                 }
               }
@@ -136,24 +134,17 @@ class _NeoDateInputState extends State<NeoDateInput> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // First row: [ ][ ] - [ ][ ]
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildBox(0, 'D'),
             _buildBox(1, 'D'),
-            Container(
-              width: 16,
-              height: 8,
-              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              color: Colors.black,
-            ),
+            Container(width: 16, height: 8, margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16), color: Colors.black),
             _buildBox(2, 'M'),
             _buildBox(3, 'M'),
           ],
         ),
         const SizedBox(height: 8),
-        // Second row: four year boxes [Y][Y][Y][Y]
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

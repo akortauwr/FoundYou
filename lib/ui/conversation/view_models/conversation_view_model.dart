@@ -1,6 +1,7 @@
 import 'dart:async'; // Krok 1: Importujemy bibliotekę async dla Timera
 
 import 'package:flutter/material.dart';
+import 'package:found_you_app/config/providers.dart';
 import 'package:found_you_app/data/repositories/messenger/messenger_repository.dart';
 import 'package:found_you_app/domain/models/message_model/message_model.dart';// Upewnij się, że masz poprawny import
 import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
@@ -8,7 +9,7 @@ import 'package:found_you_app/utils/result.dart';
 
 class ConversationViewModel extends ChangeNotifier {
   final MessengerRepository _messengerRepository;
-  static const int _currentUserId = 1; // Przykładowe ID obecnego użytkownika
+  late int? _currentUserId;
   final int chatId;
   final SuggestedFriendModel chatPartner;
   final List<MessageModel> _messages = [];
@@ -22,6 +23,7 @@ class ConversationViewModel extends ChangeNotifier {
 
   ConversationViewModel({required this.chatId, required MessengerRepository messengerRepository, required this.chatPartner})
       : _messengerRepository = messengerRepository {
+
     initMessages();
   }
 
@@ -39,6 +41,17 @@ class ConversationViewModel extends ChangeNotifier {
   void initMessages() async {
     _isLoading = true;
     notifyListeners();
+
+    final user = await secureStorageService.fetchUserId();
+
+    if (user is Ok<int?>) {
+      _currentUserId = user.value;
+    } else {
+      debugPrint('Error fetching current user ID: ${user}');
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
 
     final result = await _messengerRepository.loadMessages(chatId);
     if (result is Ok<List<MessageModel>>) {

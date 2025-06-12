@@ -6,7 +6,7 @@ import 'package:found_you_app/utils/result.dart';
 
 abstract class MessengerRepository {
 
-  Future<Result<void>> createChat(
+  Future<Result<ChatModel>> createChat(
     int userId,
   );
 

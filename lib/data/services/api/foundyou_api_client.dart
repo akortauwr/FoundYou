@@ -108,7 +108,7 @@ class FoundYouApiClient {
     try {
       final response = await apiClient.get('/api/suggested-friends/recent-likes/');
       if (response is List) {
-        final friends = response.map((e) => SuggestedFriendModel.fromJson(e)).toList();
+        final friends = response.map((e) => SuggestedFriendModel.fromJson(e['sender'])).toList();
         return Result.ok(friends);
       } else {
         return Result.error(Exception('Invalid response format'));
@@ -211,10 +211,10 @@ class FoundYouApiClient {
     }
   }
 
-  Future<Result<void>> createChat(int userId) async {
+  Future<Result<ChatModel>> createChat(int userId) async {
     try {
-      await apiClient.post('/api/chats/', {'user_id': userId});
-      return Result.ok(null);
+      final response =  await apiClient.post('/api/private-chat/$userId/', {});
+      return Result.ok(ChatModel.fromJson(response));
     } catch (e) {
       return Result.error(Exception('Nie udało się utworzyć czatu: $e'));
     }

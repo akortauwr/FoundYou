@@ -6,6 +6,7 @@ import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 class NeoTextField extends StatefulWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
+  final String? value;
   final String label;
   final bool obscureText;
   final TextInputType keyboardType;
@@ -15,6 +16,7 @@ class NeoTextField extends StatefulWidget {
     Key? key,
     this.controller,
     this.onChanged,
+    this.value,
     required this.label,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
@@ -52,7 +54,6 @@ class _NeoTextFieldState extends State<NeoTextField> {
     final shadowOffset = _focusNode.hasFocus ?  const Offset(0.5, 0.5): const Offset(6, 6);
 
     return AnimatedContainer(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
       decoration: BoxDecoration(
@@ -70,6 +71,7 @@ class _NeoTextFieldState extends State<NeoTextField> {
       child: TextField(
         controller: widget.controller,
         onChanged: widget.onChanged,
+
         focusNode: _focusNode,
         obscureText: widget.obscureText,
         keyboardType: widget.keyboardType,

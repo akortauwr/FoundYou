@@ -25,11 +25,13 @@ class AuthRepositoryNetwork extends AuthRepository {
     final result = await _authApiClient.login(LoginRequest(email: email, password: password));
     switch (result) {
       case Error<LoginResponse>():
+        print('Login error: ${result.error}');
         return Result.error(result.error);
       case Ok<LoginResponse>():
         final LoginResponse loginResponse = result.value;
         await _secureStorageService.saveAccessToken(loginResponse.access);
         await _secureStorageService.saveRefreshToken(loginResponse.refresh);
+        await _secureStorageService.saveUserId(loginResponse.userId);
         if(rememberMe) {
           await _secureStorageService.saveUserLogin(email);
           await _secureStorageService.saveUserPassword(password);
@@ -100,7 +102,7 @@ class AuthRepositoryNetwork extends AuthRepository {
   }
 
   @override
-  Future<Result<void>> resetPassword({required String email}) {
+  Future<Result<void>> resetPassword({required String oldPassword, required String newPassword}) async {
     // TODO: implement resetPassword
     throw UnimplementedError();
   }

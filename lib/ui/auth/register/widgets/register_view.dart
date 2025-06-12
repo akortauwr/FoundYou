@@ -46,7 +46,7 @@ class _RegisterViewState extends State<RegisterView>{
                     );
                     return;
                   }
-                  context.go(Paths.registerForm, extra: {
+                  context.pushNamed('registerForm', extra: {
                     'email': _email.text,
                     'password': _password.text,
                   });

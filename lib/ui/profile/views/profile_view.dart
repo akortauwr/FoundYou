@@ -43,7 +43,10 @@ class ProfileView extends StatelessWidget {
               const SizedBox(height: 20),
               // Karta z przyciskami ustawień
               SettingsCard(
-                onChangePassword: () => {},
+                onChangePassword: () {
+                  // Logika zmiany hasła
+                  context.push(Paths.resetPassword);
+                },
                 onLogout: () {
                   // Logika wylogowania
                   vm.logout();
@@ -59,7 +62,7 @@ class ProfileView extends StatelessWidget {
                 },
                 onEditProfile: () {
                   // Logika edytowania profilu
-                  Navigator.pushNamed(context, '/edit_profile');
+                  context.pushNamed('editData', extra: user,);
                 },
               ),
             ],

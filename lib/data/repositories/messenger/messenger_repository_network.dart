@@ -12,9 +12,8 @@ class MessengerRepositoryNetwork extends MessengerRepository{
 
 
   @override
-  Future<Result<void>> createChat(int userId) {
-    // TODO: implement createChat
-    throw UnimplementedError();
+  Future<Result<ChatModel>> createChat(int userId) {
+    return apiClient.createChat(userId);
   }
 
   @override

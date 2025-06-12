@@ -31,7 +31,7 @@ class AuthRepositoryDev extends AuthRepository{
   }
 
   @override
-  Future<Result<void>> resetPassword({required String email}) async {
+  Future<Result<void>> resetPassword({required String oldPassword, required String newPassword}) async {
     return Result.ok(null);
   }
 

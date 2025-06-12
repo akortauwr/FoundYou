@@ -1,75 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:found_you_app/ui/auth/reset_password/view_models/reset_password_view_model.dart';
+import 'package:found_you_app/ui/common_widgets/neo_app_bar.dart';
+import 'package:found_you_app/ui/common_widgets/neo_button.dart';
+import 'package:found_you_app/ui/common_widgets/neo_card.dart';
+import 'package:found_you_app/ui/common_widgets/neo_text_field.dart';
+import 'package:found_you_app/ui/core/colors/neo_colors.dart';
+import 'package:provider/provider.dart';
 
-class ResetPasswordView extends StatefulWidget{
-  final ResetPasswordViewModel viewModel;
-  const ResetPasswordView({Key? key, required this.viewModel});
-
+class ResetPasswordView extends StatelessWidget {
   @override
-  State<ResetPasswordView> createState() => _ResetPasswordViewState();
-}
-
-class _ResetPasswordViewState extends State<ResetPasswordView>{
-  final TextEditingController _email = TextEditingController(text: '');
-
-  @override
-  void initState(){
-    super.initState();
-    widget.viewModel.resetPassword.addListener(_onResult);
-  }
-
-  @override
-  void didUpdateWidget(covariant ResetPasswordView oldWidget){
-    super.didUpdateWidget(oldWidget);
-    oldWidget.viewModel.resetPassword.removeListener(_onResult);
-    widget.viewModel.resetPassword.addListener(_onResult);
-  }
-
-  @override
-  void dispose(){
-    widget.viewModel.resetPassword.removeListener(_onResult);
-    _email.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
+    final vm = context.watch<ResetPasswordViewModel>();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reset Password'),
-      ),
+      appBar: NeoAppBar(text: 'Zresetuj hasło'),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('Reset Password'),
-            TextField(
-              controller: _email,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-              ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: NeoCard(
+            color: NeoColors.softPurple,
+            borderRadius: BorderRadius.circular(0),
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                NeoTextField(
+                  controller: vm.oldPasswordController,
+                  label: 'Stare hasło',
+                  obscureText: true,
+                  keyboardType: TextInputType.visiblePassword,
+                  maxLines: 1,
+                ),
+                SizedBox(height: 24),
+                NeoTextField(
+                  controller: vm.newPasswordController,
+                  label: 'Nowe hasło',
+                  obscureText: true,
+                  keyboardType: TextInputType.visiblePassword,
+                  maxLines: 1,
+                ),
+                SizedBox(height: 12),
+                NeoTextField(
+                  controller: vm.confirmNewPasswordController,
+                  label: 'Potwierdź nowe hasło',
+                  obscureText: true,
+                  keyboardType: TextInputType.visiblePassword,
+                  maxLines: 1,
+                ),
+                SizedBox(height: 8),
+                SizedBox(height: 20),
+                NeoButton(onPressed: vm.reset, text: 'Zresetuj hasło', backgroundColor: NeoColors.springGreen),
+                if (vm.resetError)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Error resetting password', style: TextStyle(color: Colors.red)),
+                  ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () => widget.viewModel.resetPassword.execute(_email.text),
-              child: const Text('Reset Password'),
-            ),
-            const SizedBox(height: 8.0),
-            if(widget.viewModel.resetPassword.error)
-              Text(
-                widget.viewModel.resetPassword.error.toString(),
-                style: const TextStyle(color: Colors.red),
-              ),
-            const SizedBox(height: 8.0),
-
-          ],
+          ),
         ),
       ),
     );
-  }
-
-  void _onResult(){
-    if(widget.viewModel.resetPassword.completed){
-
-    }
   }
 }

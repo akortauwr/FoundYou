@@ -11,7 +11,7 @@ abstract class AuthRepository extends ChangeNotifier{
 
   Future<Result<void>> logout();
 
-  Future<Result<void>> resetPassword({required String email});
+  Future<Result<void>> resetPassword({required String oldPassword, required String newPassword});
 
   Future<bool> get isLogged;
 }

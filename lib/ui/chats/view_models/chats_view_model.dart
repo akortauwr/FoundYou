@@ -9,12 +9,17 @@ class ChatsViewModel extends ChangeNotifier{
   final List<ChatModel> _chats = [];
   List<ChatModel> get chats => List.unmodifiable(_chats);
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   ChatsViewModel({required MessengerRepository messengerRepository})
       : _messengerRepository = messengerRepository {
     _loadChats();
   }
 
   Future<void> _loadChats() async {
+    _isLoading = true;
+    notifyListeners();
     final result = await _messengerRepository.loadChats();
     switch (result) {
       case Ok<List<ChatModel>> ok:
@@ -28,5 +33,7 @@ class ChatsViewModel extends ChangeNotifier{
         // You can also notify listeners if you want to update the UI
         break;
     }
+    _isLoading = false;
+    notifyListeners();
   }
 }
