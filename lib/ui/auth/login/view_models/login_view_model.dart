@@ -3,7 +3,7 @@ import 'package:found_you_app/data/repositories/auth/auth_repository.dart';
 import 'package:found_you_app/utils/command.dart';
 import 'package:found_you_app/utils/result.dart';
 
-class LoginViewModel extends ChangeNotifier{
+class LoginViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
 
   final emailController = TextEditingController(text: 'filip.kowalski45@example.pl');
@@ -11,12 +11,12 @@ class LoginViewModel extends ChangeNotifier{
 
   bool rememberMe = false;
   bool _loginError = false;
+
   bool get loginError => _loginError;
 
   late Command1 login;
 
-  LoginViewModel({required AuthRepository authRepository})
-      : _authRepository = authRepository {
+  LoginViewModel({required AuthRepository authRepository}) : _authRepository = authRepository {
     login = Command1<void, (String email, String password, bool rememberMe)>(_login);
   }
 
@@ -30,16 +30,10 @@ class LoginViewModel extends ChangeNotifier{
     notifyListeners();
 
     final (email, password, rememberMe) = credentials;
-    final result = await _authRepository.login(
-      email: email,
-      password: password,
-      rememberMe: rememberMe,
-    );
-
+    final result = await _authRepository.login(email: email, password: password, rememberMe: rememberMe);
 
     if (result is Error<void>) {
       _loginError = true;
-
     }
     notifyListeners();
     return result;

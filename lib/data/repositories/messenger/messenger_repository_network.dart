@@ -1,15 +1,13 @@
-
-
 import 'package:found_you_app/data/repositories/messenger/messenger_repository.dart';
 import 'package:found_you_app/data/services/api/foundyou_api_client.dart';
 import 'package:found_you_app/domain/models/chat_model/chat_model.dart';
 import 'package:found_you_app/domain/models/message_model/message_model.dart';
 import 'package:found_you_app/utils/result.dart';
 
-class MessengerRepositoryNetwork extends MessengerRepository{
+class MessengerRepositoryNetwork extends MessengerRepository {
   final FoundYouApiClient apiClient;
-  MessengerRepositoryNetwork({required this.apiClient});
 
+  MessengerRepositoryNetwork({required this.apiClient});
 
   @override
   Future<Result<ChatModel>> createChat(int userId) {
@@ -40,6 +38,4 @@ class MessengerRepositoryNetwork extends MessengerRepository{
   Future<Result<MessageModel>> sendMessage(int chatId, String content) {
     return apiClient.sendMessage(chatId, content);
   }
-
-
 }

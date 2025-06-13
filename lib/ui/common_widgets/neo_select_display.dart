@@ -1,29 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 
-/// Read-only, neo-brutalist style display of selected labels.
 class NeoSelectDisplay extends StatelessWidget {
-  /// List of labels to display.
   final List<String> labels;
   final double fontSize;
 
-  /// Maximum number of items to show (null = unlimited).
   final int? maxToShow;
 
-  /// Color for the displayed items.
-
-    NeoSelectDisplay({
-    Key? key,
-    required this.labels,
-    this.fontSize = 12,
-    this.maxToShow,
-  }) : super(key: key);
+  const NeoSelectDisplay({super.key, required this.labels, this.fontSize = 12, this.maxToShow});
 
   @override
   Widget build(BuildContext context) {
-    final toShow = (maxToShow != null && labels.length > maxToShow!)
-        ? labels.sublist(0, maxToShow!)
-        : labels;
+    final toShow = (maxToShow != null && labels.length > maxToShow!) ? labels.sublist(0, maxToShow!) : labels;
 
     return Wrap(
       spacing: 8,
@@ -31,8 +19,7 @@ class NeoSelectDisplay extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: [
         ...toShow.map((label) => _buildItem(label, fontSize)),
-        if (maxToShow != null && labels.length > maxToShow!)
-          _buildOverflowIndicator(labels.length - maxToShow!)
+        if (maxToShow != null && labels.length > maxToShow!) _buildOverflowIndicator(labels.length - maxToShow!),
       ],
     );
   }
@@ -44,18 +31,9 @@ class NeoSelectDisplay extends StatelessWidget {
         color: NeoColors.purpleMystic,
         border: Border.all(color: Colors.black, width: 3),
         borderRadius: BorderRadius.circular(8),
-        boxShadow: const [
-          BoxShadow(color: Colors.black, offset: Offset(1, 1)),
-        ],
+        boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(1, 1))],
       ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          fontSize: fontSize,
-        ),
-      ),
+      child: Text(label, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: fontSize)),
     );
   }
 
@@ -63,21 +41,12 @@ class NeoSelectDisplay extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-
         color: NeoColors.randomPastel(),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.black, width: 3),
-        boxShadow: const [
-          BoxShadow(color: Colors.black, offset: Offset(1, 1)),
-        ],
+        boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(1, 1))],
       ),
-      child: Text(
-        '+$extraCount more',
-        style: const TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      child: Text('+$extraCount more', style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
     );
   }
 }

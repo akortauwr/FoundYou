@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 
-/// A neobrutalist style radio button group with two options.
 class NeoRadioGroup extends StatefulWidget {
-  /// Labels for the two options
   final String option1;
   final String option2;
 
   final Color opt1Color;
   final Color opt2Color;
 
-  /// Currently selected index: 0 or 1
   final int? selectedIndex;
 
-  /// Callback when selection changes
   final ValueChanged<int> onChanged;
 
   const NeoRadioGroup({
-    Key? key,
+    super.key,
     required this.option1,
     required this.option2,
     required this.selectedIndex,
     required this.onChanged,
     this.opt1Color = NeoColors.bubblegumPink,
     this.opt2Color = NeoColors.bubblegumPink,
-  }) : super(key: key);
+  });
 
   @override
-  _NeoRadioGroupState createState() => _NeoRadioGroupState();
+  State<NeoRadioGroup> createState() => _NeoRadioGroupState();
 }
 
 class _NeoRadioGroupState extends State<NeoRadioGroup> {
@@ -47,9 +43,7 @@ class _NeoRadioGroupState extends State<NeoRadioGroup> {
 
   Widget _buildOption(String text, int index) {
     final bool selected = _current == index;
-    final Color bgColor = selected
-        ? (index == 0 ? widget.opt1Color : widget.opt2Color)
-        : Colors.white;
+    final Color bgColor = selected ? (index == 0 ? widget.opt1Color : widget.opt2Color) : Colors.white;
     final Offset shadowOffset = selected ? const Offset(0.5, 0.5) : const Offset(6, 6);
     return GestureDetector(
       onTap: () => _select(index),
@@ -61,19 +55,10 @@ class _NeoRadioGroupState extends State<NeoRadioGroup> {
         decoration: BoxDecoration(
           color: bgColor,
           border: Border.all(color: Colors.black, width: 4),
-          boxShadow: [
-            BoxShadow(color: Colors.black, offset: shadowOffset),
-          ],
+          boxShadow: [BoxShadow(color: Colors.black, offset: shadowOffset)],
         ),
         child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: Text(text, style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
         ),
       ),
     );

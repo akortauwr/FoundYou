@@ -1,8 +1,6 @@
-// lib/widgets/common/neo_text_field.dart
 import 'package:flutter/material.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 
-/// Własny TextField w stylu neo-brutalismu z cieniem i dynamiczną zmianą obramowania.
 class NeoTextField extends StatefulWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
@@ -13,7 +11,7 @@ class NeoTextField extends StatefulWidget {
   final int maxLines;
 
   const NeoTextField({
-    Key? key,
+    super.key,
     this.controller,
     this.onChanged,
     this.value,
@@ -21,10 +19,10 @@ class NeoTextField extends StatefulWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.maxLines = 1,
-  }) : super(key: key);
+  });
 
   @override
-  _NeoTextFieldState createState() => _NeoTextFieldState();
+  State<NeoTextField> createState() => _NeoTextFieldState();
 }
 
 class _NeoTextFieldState extends State<NeoTextField> {
@@ -33,10 +31,10 @@ class _NeoTextFieldState extends State<NeoTextField> {
   @override
   void initState() {
     super.initState();
-    _focusNode = FocusNode()
-      ..addListener(() {
-        setState(() {});
-      });
+    _focusNode =
+        FocusNode()..addListener(() {
+          setState(() {});
+        });
   }
 
   @override
@@ -47,11 +45,9 @@ class _NeoTextFieldState extends State<NeoTextField> {
 
   @override
   Widget build(BuildContext context) {
-    // Wybór koloru obramowania w zależności od stanu focus
-    final Color backgroundColor =
-    _focusNode.hasFocus ? NeoColors.coralPeach : Colors.white;
+    final Color backgroundColor = _focusNode.hasFocus ? NeoColors.coralPeach : Colors.white;
 
-    final shadowOffset = _focusNode.hasFocus ?  const Offset(0.5, 0.5): const Offset(6, 6);
+    final shadowOffset = _focusNode.hasFocus ? const Offset(0.5, 0.5) : const Offset(6, 6);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -60,13 +56,7 @@ class _NeoTextFieldState extends State<NeoTextField> {
         color: backgroundColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.black, width: 4),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black,
-            offset: shadowOffset,
-            blurRadius: 0,
-          )
-        ],
+        boxShadow: [BoxShadow(color: Colors.black, offset: shadowOffset, blurRadius: 0)],
       ),
       child: TextField(
         controller: widget.controller,
@@ -80,10 +70,7 @@ class _NeoTextFieldState extends State<NeoTextField> {
           labelText: widget.label,
           labelStyle: const TextStyle(color: Colors.black),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
         style: const TextStyle(color: Colors.black, fontSize: 16),
       ),

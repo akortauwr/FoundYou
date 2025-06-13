@@ -25,7 +25,7 @@ class NeoCardNewMatches extends StatelessWidget {
                   child: Stack(
                     children: [
                       NeoFriendProfile(user: friend),
-                      SizedBox(height: 8,),
+                      const SizedBox(height: 8),
                       Positioned(
                         bottom: 0,
                         left: 0,
@@ -34,24 +34,24 @@ class NeoCardNewMatches extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             NeoIconButton(
-                              child: Icon(Icons.close),
                               backgroundColor: NeoColors.tomatoRed,
                               onPressed: () => Navigator.of(context).pop(),
                               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                              child: const Icon(Icons.close),
                             ),
                             NeoIconButton(
-                              child: Stack(
-                                children: [
-                                  Icon(Icons.chat_bubble, color: Colors.white, size: 32),
-                                  Icon(Icons.chat_bubble_outline, color: Colors.black, size: 32),
-                                ],
-                              ),
                               backgroundColor: NeoColors.springGreen,
                               onPressed: () {
                                 onPressed();
                                 Navigator.of(context).pop();
                               },
                               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                              child: const Stack(
+                                children: [
+                                  Icon(Icons.chat_bubble, color: Colors.white, size: 32),
+                                  Icon(Icons.chat_bubble_outline, color: Colors.black, size: 32),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -93,7 +93,7 @@ class NeoCardNewMatches extends StatelessWidget {
                       return const Icon(Icons.person, size: 60, color: Colors.grey);
                     },
                   )
-                  : const Icon(Icons.person, size: 60, color: Colors.grey), // Placeholder icon
+                  : const Icon(Icons.person, size: 60, color: Colors.grey),
         ),
       ),
     );

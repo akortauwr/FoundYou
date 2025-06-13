@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:found_you_app/domain/models/form_field/form_field_model.dart';
 import 'package:found_you_app/utils/result.dart';
 
-abstract class AuthRepository extends ChangeNotifier{
+abstract class AuthRepository extends ChangeNotifier {
   Future<Result<void>> login({required String email, required String password, bool rememberMe = false});
 
   Future<Result<List<FormFieldModel>>> getRegisterFormFields();

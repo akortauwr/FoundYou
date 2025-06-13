@@ -1,16 +1,13 @@
-// near_you_view.dart
-
 import 'package:flutter/material.dart';
+import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
 import 'package:found_you_app/ui/common_widgets/neo_card.dart';
 import 'package:found_you_app/ui/common_widgets/neo_friend_profile.dart';
-import 'package:found_you_app/ui/common_widgets/neo_icon_buttons.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
-import 'package:provider/provider.dart';
-import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
 import 'package:found_you_app/ui/near_you/view_models/near_you_view_model.dart';
+import 'package:provider/provider.dart';
 
 class NearYouView extends StatefulWidget {
-  const NearYouView({Key? key}) : super(key: key);
+  const NearYouView({super.key});
 
   @override
   State<NearYouView> createState() => _NearYouViewState();
@@ -45,7 +42,7 @@ class _NearYouViewState extends State<NearYouView> {
       _listKey.currentState?.insertItem(i);
     }
 
-    if(mounted) {
+    if (mounted) {
       setState(() {
         _isInitialDataLoaded = true;
       });
@@ -59,8 +56,8 @@ class _NearYouViewState extends State<NearYouView> {
     final removedItem = _localFriends.removeAt(index);
     _listKey.currentState?.removeItem(
       index,
-      // Przekazujemy usunięty element do buildera animacji
-          (context, animation) => _buildAnimatingTile(removedItem, animation),
+
+      (context, animation) => _buildAnimatingTile(removedItem, animation),
       duration: const Duration(milliseconds: 400),
     );
 
@@ -77,10 +74,8 @@ class _NearYouViewState extends State<NearYouView> {
     }
   }
 
-  /// ZMIANA NR 1: Dodajemy klucz do widgetu animowanego.
   Widget _buildAnimatingTile(SuggestedFriendModel user, Animation<double> animation) {
     return SizeTransition(
-      // Klucz jest niezbędny, aby Flutter wiedział, który DOKŁADNIE element animuje.
       key: ValueKey(user.id),
       sizeFactor: animation,
       child: _buildTile(user: user, onTap: () {}, backgroundColor: NeoColors.tomatoRed),
@@ -96,17 +91,19 @@ class _NearYouViewState extends State<NearYouView> {
     }
 
     if (!vm.isLoading && _localFriends.isEmpty && _isInitialDataLoaded) {
-      return const Center(child: Text("Brak użytkowników w pobliżu.", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),));
+      return const Center(
+        child: Text(
+          "Brak użytkowników w pobliżu.",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+      );
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          "Blisko ciebie",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-        ),
+        const Text("Blisko ciebie", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
         AnimatedList(
           key: _listKey,
           shrinkWrap: true,
@@ -117,11 +114,7 @@ class _NearYouViewState extends State<NearYouView> {
             return SizeTransition(
               key: ValueKey(user.id),
               sizeFactor: animation,
-              child: _buildTile(
-                user: user,
-                onTap: () => _handleLike(user, index),
-                backgroundColor: Colors.white, // Możesz zmienić kolor tła, jeśli chcesz
-              ),
+              child: _buildTile(user: user, onTap: () => _handleLike(user, index), backgroundColor: Colors.white),
             );
           },
         ),
@@ -150,15 +143,13 @@ class _NearYouViewState extends State<NearYouView> {
         child: Row(
           children: [
             Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.black, width: 4),
-              ),
+              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.black, width: 4)),
               child: CircleAvatar(
                 radius: 24,
-                backgroundImage: user.imageUrl != null && user.imageUrl!.isNotEmpty
-                    ? NetworkImage(user.imageUrl!)
-                    : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                backgroundImage:
+                    user.imageUrl != null && user.imageUrl!.isNotEmpty
+                        ? NetworkImage(user.imageUrl!)
+                        : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
               ),
             ),
             const SizedBox(width: 16),
@@ -166,11 +157,16 @@ class _NearYouViewState extends State<NearYouView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(user.username, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text(
+                    user.username,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     user.bio,
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -179,19 +175,20 @@ class _NearYouViewState extends State<NearYouView> {
             ),
             GestureDetector(
               onTap: onTap,
-              child: isLiking
-                  ? const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(strokeWidth: 2.0, color: Colors.black),
-              )
-                  : Stack(
-                    children: [
-                       Icon(Icons.favorite, color: backgroundColor,),
-                      const Icon(Icons.favorite_border, color: Colors.black),
-                    ],
-                  ),
-            )
+              child:
+                  isLiking
+                      ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2.0, color: Colors.black),
+                      )
+                      : Stack(
+                        children: [
+                          Icon(Icons.favorite, color: backgroundColor),
+                          const Icon(Icons.favorite_border, color: Colors.black),
+                        ],
+                      ),
+            ),
           ],
         ),
       ),

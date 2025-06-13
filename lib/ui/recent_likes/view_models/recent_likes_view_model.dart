@@ -1,4 +1,3 @@
-// presentation/viewmodels/recent_likes_view_model.dart
 import 'package:flutter/material.dart';
 import 'package:found_you_app/data/repositories/suggested_friends/suggested_friends_repository.dart';
 import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
@@ -10,10 +9,10 @@ class RecentLikesViewModel extends ChangeNotifier {
   bool _isLoading = false;
 
   List<SuggestedFriendModel> get suggestedFriends => _suggestedFriends;
+
   bool get isLoading => _isLoading;
 
-  RecentLikesViewModel({required SuggestedFriendsRepository repository})
-      : _repository = repository {
+  RecentLikesViewModel({required SuggestedFriendsRepository repository}) : _repository = repository {
     fetchSuggestedFriends();
   }
 

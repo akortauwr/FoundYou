@@ -25,11 +25,10 @@ class NeoIconButton extends StatefulWidget {
     this.borderRadius,
     this.width,
     this.height,
-
   });
 
   @override
-  _NeoIconButtonState createState() => _NeoIconButtonState();
+  State<NeoIconButton> createState() => _NeoIconButtonState();
 }
 
 class _NeoIconButtonState extends State<NeoIconButton> {
@@ -56,10 +55,7 @@ class _NeoIconButtonState extends State<NeoIconButton> {
   @override
   Widget build(BuildContext context) {
     final Offset offset = _pressed ? const Offset(0.5, 0.5) : widget.shadowOffset;
-    final Color bgColor = widget.disabled
-        ? NeoColors.disabledGray
-        : widget.backgroundColor;
-    final Color textColor = widget.disabled ? Colors.white : Colors.black;
+    final Color bgColor = widget.disabled ? NeoColors.disabledGray : widget.backgroundColor;
 
     return GestureDetector(
       onTapDown: _handleTapDown,
@@ -73,15 +69,11 @@ class _NeoIconButtonState extends State<NeoIconButton> {
         decoration: BoxDecoration(
           color: bgColor,
           border: Border.all(color: Colors.black, width: widget.borderWidth),
-          boxShadow: [
-            BoxShadow(color: Colors.black, offset: offset, blurRadius: 0),
-          ],
-          borderRadius: widget.borderRadius
+          boxShadow: [BoxShadow(color: Colors.black, offset: offset, blurRadius: 0)],
+          borderRadius: widget.borderRadius,
         ),
         padding: widget.padding,
-        child: Center(
-          child: widget.child,
-        ),
+        child: Center(child: widget.child),
       ),
     );
   }

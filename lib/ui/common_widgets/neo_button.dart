@@ -26,7 +26,7 @@ class NeoButton extends StatefulWidget {
   });
 
   @override
-  _NeoButtonState createState() => _NeoButtonState();
+  State<NeoButton> createState() => _NeoButtonState();
 }
 
 class _NeoButtonState extends State<NeoButton> {

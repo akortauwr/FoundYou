@@ -28,9 +28,7 @@ class ChatsViewModel extends ChangeNotifier{
         notifyListeners();
         break;
       case Error error:
-        // Handle error, e.g., show a snackbar or dialog
         debugPrint('Error loading chats: ${error.error}');
-        // You can also notify listeners if you want to update the UI
         break;
     }
     _isLoading = false;

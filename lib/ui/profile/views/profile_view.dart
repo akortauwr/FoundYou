@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:found_you_app/domain/models/user_model/user_model.dart';
 import 'package:found_you_app/routing/paths.dart';
@@ -12,6 +10,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class ProfileView extends StatelessWidget {
+  const ProfileView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<ProfileViewModel>();
@@ -38,31 +38,24 @@ class ProfileView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Karta z informacjami o użytkowniku
               ProfileInfoCard(user: user, age: age),
               const SizedBox(height: 20),
-              // Karta z przyciskami ustawień
               SettingsCard(
                 onChangePassword: () {
-                  // Logika zmiany hasła
                   context.push(Paths.resetPassword);
                 },
                 onLogout: () {
-                  // Logika wylogowania
                   vm.logout();
-                  context.go(Paths.login); // Przekierowanie do ekranu logowania
+                  context.go(Paths.login);
                 },
                 onTermsOfService: () {
-                  // Logika regulaminu
                   Navigator.pushNamed(context, '/terms');
                 },
                 onRules: () {
-                  // Logika zasad korzystania
                   Navigator.pushNamed(context, '/rules');
                 },
                 onEditProfile: () {
-                  // Logika edytowania profilu
-                  context.pushNamed('editData', extra: user,);
+                  context.pushNamed('editData', extra: user);
                 },
               ),
             ],
@@ -77,7 +70,7 @@ class ProfileInfoCard extends StatelessWidget {
   final UserModel user;
   final int age;
 
-  const ProfileInfoCard({Key? key, required this.user, required this.age}) : super(key: key);
+  const ProfileInfoCard({super.key, required this.user, required this.age});
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +79,6 @@ class ProfileInfoCard extends StatelessWidget {
       color: NeoColors.lightPurple,
       child: Column(
         children: [
-          // Zdjęcie profilowe lub ikona domyślna
           Container(
             width: 164,
             height: 164,
@@ -94,54 +86,50 @@ class ProfileInfoCard extends StatelessWidget {
               color: Colors.white,
               shape: BoxShape.circle,
               border: Border.all(color: Colors.black, width: 4),
-              boxShadow: [BoxShadow(color: Colors.black, offset: Offset(3, 3), blurRadius: 0)],
+              boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(3, 3), blurRadius: 0)],
             ),
-            child: user.imageUrl != null ? ClipOval(
-                child: Image.network(user.imageUrl!)
-              ): Container(),
+            child: user.imageUrl != null ? ClipOval(child: Image.network(user.imageUrl!)) : Container(),
           ),
           const SizedBox(height: 16),
-          // Imię i wiek użytkownika
+
           Text(
             "${user.username}, $age",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          // Bio / opis użytkownika
-          NeoCard(borderRadius: BorderRadius.all(Radius.zero), child: Text(user.bio, style: TextStyle(fontSize: 16,
-              fontWeight:
-          FontWeight
-              .w600)
-              , textAlign:
-          TextAlign
-              .center)),
-          const SizedBox(height: 8),
-          // Liczba znajomych
+
           NeoCard(
-            borderRadius: BorderRadius.all(Radius.zero),
+            borderRadius: const BorderRadius.all(Radius.zero),
+            child: Text(
+              user.bio,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          NeoCard(
+            borderRadius: const BorderRadius.all(Radius.zero),
             width: 128,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.group,),
+                const Icon(Icons.group),
                 const SizedBox(width: 6),
-                Text('${user.friendCount}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                Text('${user.friendCount}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
               ],
             ),
           ),
           const SizedBox(height: 16),
-          // Pasje użytkownika jako Chips
-          if (user.passions.isNotEmpty) ...[
-            NeoSelectDisplay(labels: user.passions, maxToShow: 5, fontSize: 16.0),
-          ],
+
+          if (user.passions.isNotEmpty) ...[NeoSelectDisplay(labels: user.passions, maxToShow: 5, fontSize: 16.0)],
         ],
       ),
     );
   }
 }
 
-// Widget karty ustawień z przyciskami "Zmień hasło" i "Wyloguj się"
 class SettingsCard extends StatelessWidget {
   final VoidCallback onChangePassword;
   final VoidCallback onLogout;
@@ -150,74 +138,49 @@ class SettingsCard extends StatelessWidget {
   final VoidCallback onEditProfile;
 
   const SettingsCard({
-    Key? key,
+    super.key,
     required this.onChangePassword,
     required this.onLogout,
     required this.onTermsOfService,
     required this.onRules,
     required this.onEditProfile,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return NeoCard(
       margin: const EdgeInsets.all(0),
       padding: const EdgeInsets.all(32),
-      borderRadius: BorderRadius.all(Radius.zero),
+      borderRadius: const BorderRadius.all(Radius.zero),
 
       child: Column(
         children: [
-          _buildTile(
-            icon: Icons.lock,
-            title: 'Zmień hasło',
-            onTap: onChangePassword,
-          ),
-          SizedBox(height: 16),
-          _buildTile(
-            icon: Icons.description,
-            title: 'Regulamin',
-            onTap: onTermsOfService,
-          ),
-          SizedBox(height: 16),
-          _buildTile(
-            icon: Icons.rule,
-            title: 'Zasady korzystania',
-            onTap: onRules,
-          ),
+          _buildTile(icon: Icons.lock, title: 'Zmień hasło', onTap: onChangePassword),
+          const SizedBox(height: 16),
+          _buildTile(icon: Icons.description, title: 'Regulamin', onTap: onTermsOfService),
+          const SizedBox(height: 16),
+          _buildTile(icon: Icons.rule, title: 'Zasady korzystania', onTap: onRules),
 
-          SizedBox(height: 16),
-          _buildTile(
-            icon: Icons.edit,
-            title: 'Edytuj dane',
-            onTap: onEditProfile,
-          ),
-          SizedBox(height: 16),
-          _buildTile(
-            icon: Icons.logout,
-            title: 'Wyloguj się',
-            onTap: onLogout,
-          ),
+          const SizedBox(height: 16),
+          _buildTile(icon: Icons.edit, title: 'Edytuj dane', onTap: onEditProfile),
+          const SizedBox(height: 16),
+          _buildTile(icon: Icons.logout, title: 'Wyloguj się', onTap: onLogout),
         ],
       ),
     );
   }
 
-  Widget _buildTile({
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildTile({required IconData icon, required String title, required VoidCallback onTap}) {
     return Row(
       children: [
-        NeoIconButton(child: Icon(icon, size: 24), onPressed: onTap, backgroundColor: NeoColors.mossGreen,
-            shadowOffset: const Offset(4, 4)),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Text(
-            title,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
+        NeoIconButton(
+          onPressed: onTap,
+          backgroundColor: NeoColors.mossGreen,
+          shadowOffset: const Offset(4, 4),
+          child: Icon(icon, size: 24),
         ),
+        const SizedBox(width: 16),
+        Expanded(child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600))),
       ],
     );
   }

@@ -1,32 +1,24 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 
 class SingleDigitTextInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) return newValue;
     final lastChar = newValue.text.characters.last;
-    return TextEditingValue(
-      text: lastChar,
-      selection: const TextSelection.collapsed(offset: 1),
-    );
+    return TextEditingValue(text: lastChar, selection: const TextSelection.collapsed(offset: 1));
   }
 }
 
-/// A neobrutalist style DOB input with 8 separate digit fields.
 class NeoDateInput extends StatefulWidget {
   final ValueChanged<String> onChanged;
-  final String? initialValue; // Accepts an initial value to populate fields
+  final String? initialValue;
 
-  const NeoDateInput({Key? key, required this.onChanged, this.initialValue}) : super(key: key);
+  const NeoDateInput({super.key, required this.onChanged, this.initialValue});
 
   @override
-  _NeoDateInputState createState() => _NeoDateInputState();
+  State<NeoDateInput> createState() => _NeoDateInputState();
 }
 
 class _NeoDateInputState extends State<NeoDateInput> {
@@ -38,7 +30,6 @@ class _NeoDateInputState extends State<NeoDateInput> {
   @override
   void initState() {
     super.initState();
-    // Populate controllers with the initial value if provided
     if (widget.initialValue != null && widget.initialValue!.length == 8) {
       for (int i = 0; i < 8; i++) {
         _controllers[i].text = widget.initialValue![i];
@@ -51,7 +42,6 @@ class _NeoDateInputState extends State<NeoDateInput> {
           _bgColors[i] = _fieldNodes[i].hasFocus ? NeoColors.randomPastel() : null;
         });
       });
-      // This listener reports the full string back on any change
       _controllers[i].addListener(() {
         widget.onChanged(_controllers.map((c) => c.text).join());
       });
@@ -60,9 +50,15 @@ class _NeoDateInputState extends State<NeoDateInput> {
 
   @override
   void dispose() {
-    for (final c in _controllers) c.dispose();
-    for (final f in _fieldNodes) f.dispose();
-    for (final k in _keyListenerNodes) k.dispose();
+    for (final c in _controllers) {
+      c.dispose();
+    }
+    for (final f in _fieldNodes) {
+      f.dispose();
+    }
+    for (final k in _keyListenerNodes) {
+      k.dispose();
+    }
     super.dispose();
   }
 
@@ -85,10 +81,10 @@ class _NeoDateInputState extends State<NeoDateInput> {
           boxShadow: [BoxShadow(color: Colors.black, offset: offset)],
         ),
         alignment: Alignment.center,
-        child: RawKeyboardListener(
+        child: KeyboardListener(
           focusNode: _keyListenerNodes[index],
-          onKey: (event) {
-            if (event is RawKeyDownEvent) {
+          onKeyEvent: (event) {
+            if (event is KeyDownEvent) {
               final key = event.logicalKey.keyLabel;
               if (RegExp(r'^[0-9]$').hasMatch(key)) {
                 _controllers[index].text = key;
@@ -120,10 +116,7 @@ class _NeoDateInputState extends State<NeoDateInput> {
               contentPadding: EdgeInsets.zero,
             ),
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              SingleDigitTextInputFormatter(),
-            ],
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly, SingleDigitTextInputFormatter()],
           ),
         ),
       ),
@@ -139,7 +132,12 @@ class _NeoDateInputState extends State<NeoDateInput> {
           children: [
             _buildBox(0, 'D'),
             _buildBox(1, 'D'),
-            Container(width: 16, height: 8, margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16), color: Colors.black),
+            Container(
+              width: 16,
+              height: 8,
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              color: Colors.black,
+            ),
             _buildBox(2, 'M'),
             _buildBox(3, 'M'),
           ],
@@ -147,12 +145,7 @@ class _NeoDateInputState extends State<NeoDateInput> {
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildBox(4, 'Y'),
-            _buildBox(5, 'Y'),
-            _buildBox(6, 'Y'),
-            _buildBox(7, 'Y'),
-          ],
+          children: [_buildBox(4, 'Y'), _buildBox(5, 'Y'), _buildBox(6, 'Y'), _buildBox(7, 'Y')],
         ),
       ],
     );

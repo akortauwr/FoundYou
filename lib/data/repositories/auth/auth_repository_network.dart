@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:found_you_app/data/repositories/auth/auth_repository.dart';
 import 'package:found_you_app/data/services/api/auth_api_client.dart';
 import 'package:found_you_app/data/services/model/login_response/login_response.dart';
@@ -25,7 +24,6 @@ class AuthRepositoryNetwork extends AuthRepository {
     final result = await _authApiClient.login(LoginRequest(email: email, password: password));
     switch (result) {
       case Error<LoginResponse>():
-        print('Login error: ${result.error}');
         return Result.error(result.error);
       case Ok<LoginResponse>():
         final LoginResponse loginResponse = result.value;
@@ -98,7 +96,7 @@ class AuthRepositoryNetwork extends AuthRepository {
         );
       }
     }
-    return Result.error(Exception('No stored creds'));
+    return Result.error(Exception('No stored credentials found'));
   }
 
   @override

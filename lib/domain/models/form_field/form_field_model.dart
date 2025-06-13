@@ -15,17 +15,12 @@ abstract class FormFieldModel with _$FormFieldModel {
     @Default([]) List<FormFieldOption> options,
   }) = _FormFieldModel;
 
-  factory FormFieldModel.fromJson(Map<String, Object?> json) =>
-      _$FormFieldModelFromJson(json);
+  factory FormFieldModel.fromJson(Map<String, Object?> json) => _$FormFieldModelFromJson(json);
 }
 
 @freezed
 abstract class FormFieldOption with _$FormFieldOption {
-  const factory FormFieldOption({
-    required String name,
-    required dynamic value,
-  }) = _FormFieldOption;
+  const factory FormFieldOption({required String name, required dynamic value}) = _FormFieldOption;
 
-  factory FormFieldOption.fromJson(Map<String, Object?> json) =>
-      _$FormFieldOptionFromJson(json);
+  factory FormFieldOption.fromJson(Map<String, Object?> json) => _$FormFieldOptionFromJson(json);
 }

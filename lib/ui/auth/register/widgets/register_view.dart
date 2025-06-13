@@ -31,7 +31,7 @@ class _RegisterViewState extends State<RegisterView>{
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('FoundYou', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),),
+                const Text('FoundYou', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),),
                 const SizedBox(height: 24),
                 NeoTextField(controller: _email, label: 'Email', keyboardType: TextInputType.emailAddress, maxLines: 1,),
                 const SizedBox(height: 12),
@@ -61,7 +61,7 @@ class _RegisterViewState extends State<RegisterView>{
                     onTap: () {
                       context.go(Paths.login);
                     },
-                    child: Text('Zaloguj się', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    child: const Text('Zaloguj się', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ],),
               ],

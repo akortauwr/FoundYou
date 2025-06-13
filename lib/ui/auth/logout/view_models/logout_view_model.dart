@@ -1,14 +1,12 @@
-
 import 'package:found_you_app/data/repositories/auth/auth_repository.dart';
 import 'package:found_you_app/utils/command.dart';
 import 'package:found_you_app/utils/result.dart';
 
-class LogoutViewModel{
+class LogoutViewModel {
   final AuthRepository _authRepository;
   late Command0 logout;
 
-  LogoutViewModel({required AuthRepository authRepository})
-    : _authRepository = authRepository {
+  LogoutViewModel({required AuthRepository authRepository}) : _authRepository = authRepository {
     logout = Command0<void>(_logout);
   }
 

@@ -9,13 +9,7 @@ class NeoCardRecentLikes extends StatelessWidget {
   final SuggestedFriendModel friend;
   final VoidCallback onTap;
 
-  const NeoCardRecentLikes({
-    super.key,
-    required this.friend,
-    required this.onTap,
-
-  });
-
+  const NeoCardRecentLikes({super.key, required this.friend, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +17,6 @@ class NeoCardRecentLikes extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: GestureDetector(
         onTap: () {
-          print('clicked');
           showDialog(
             context: context,
             builder: (context) {
@@ -33,7 +26,7 @@ class NeoCardRecentLikes extends StatelessWidget {
                   child: Stack(
                     children: [
                       NeoFriendProfile(user: friend),
-                      SizedBox(height: 8,),
+                      const SizedBox(height: 8),
                       Positioned(
                         bottom: 0,
                         left: 0,
@@ -42,24 +35,24 @@ class NeoCardRecentLikes extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             NeoIconButton(
-                              child: Icon(Icons.close),
                               backgroundColor: NeoColors.tomatoRed,
                               onPressed: () => Navigator.of(context).pop(),
                               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                              child: const Icon(Icons.close),
                             ),
                             NeoIconButton(
-                              child: Stack(
+                              backgroundColor: NeoColors.springGreen,
+                              onPressed: () {
+                                onTap();
+                                Navigator.of(context).pop();
+                              },
+                              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                              child: const Stack(
                                 children: [
                                   Icon(Icons.favorite, color: Colors.white, size: 32),
                                   Icon(Icons.favorite_border, color: Colors.black, size: 32),
                                 ],
                               ),
-                              backgroundColor: NeoColors.springGreen,
-                              onPressed: (){
-                                onTap();
-                                Navigator.of(context).pop();
-                              },
-                              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                             ),
                           ],
                         ),
@@ -76,60 +69,52 @@ class NeoCardRecentLikes extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           width: 124,
           child: Column(
-            mainAxisSize: MainAxisSize.min, // So column doesn't expand infinitely
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 width: 64,
-                // Adjusted size for better proportionality
+
                 height: 64,
                 padding: const EdgeInsets.all(4),
-                // Padding inside the circle
+
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black, width: 3), // Slightly thinner border
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black,
-                      offset: Offset(4, 4),
-                      blurRadius: 0,
-                    )
-                  ],
+                  border: Border.all(color: Colors.black, width: 3),
+                  boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(4, 4), blurRadius: 0)],
                 ),
                 child: ClipOval(
-                  child: friend.imageUrl != null && friend.imageUrl!.isNotEmpty
-                      ? Image.network(
-                    friend.imageUrl!,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                    loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                              : null,
-                          strokeWidth: 2,
-                          color: Colors.black,
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.person, size: 60, color: Colors.grey);
-                    },
-                  )
-                      : const Icon(Icons.person, size: 60, color: Colors.grey), // Placeholder icon
+                  child:
+                      friend.imageUrl != null && friend.imageUrl!.isNotEmpty
+                          ? Image.network(
+                            friend.imageUrl!,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                            loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value:
+                                      loadingProgress.expectedTotalBytes != null
+                                          ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                          : null,
+                                  strokeWidth: 2,
+                                  color: Colors.black,
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.person, size: 60, color: Colors.grey);
+                            },
+                          )
+                          : const Icon(Icons.person, size: 60, color: Colors.grey),
                 ),
               ),
               const SizedBox(height: 12),
               Text(
-                friend.username, //friend.username,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+                friend.username,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:found_you_app/network/dio_client.dart';
 
-class ApiClient{
+class ApiClient {
   final Dio _dio;
-  ApiClient({Dio? dio}): _dio = dio ?? clientDio;
 
-  Future<T> get<T>(String path, { Map<String, dynamic>? queryParameters }) async {
+  ApiClient({Dio? dio}) : _dio = dio ?? clientDio;
+
+  Future<T> get<T>(String path, {Map<String, dynamic>? queryParameters}) async {
     final response = await _dio.get(path, queryParameters: queryParameters);
     return response.data as T;
   }

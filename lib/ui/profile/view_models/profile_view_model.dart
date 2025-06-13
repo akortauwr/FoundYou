@@ -11,10 +11,11 @@ class ProfileViewModel extends ChangeNotifier {
   bool _isLoading = false;
 
   ProfileViewModel({required ProfileRepository profileRepository, required AuthRepository authRepository})
-      : _profileRepository = profileRepository,
-        _authRepository = authRepository;
+    : _profileRepository = profileRepository,
+      _authRepository = authRepository;
 
   UserModel? get userModel => _userModel;
+
   bool get isLoading => _isLoading;
 
   Future<void> loadProfile() async {
@@ -25,10 +26,7 @@ class ProfileViewModel extends ChangeNotifier {
     if (result is Ok<UserModel>) {
       _userModel = result.value;
     } else {
-      // Handle error
       debugPrint('Error loading profile: ${(result as Error).error}');
-      // You can show a dialog or a snackbar with the error message
-      // For example:
 
       debugPrintStack(label: 'Error loading profile', stackTrace: StackTrace.current);
     }
@@ -43,12 +41,9 @@ class ProfileViewModel extends ChangeNotifier {
 
     final result = await _authRepository.logout();
     if (result is Ok<void>) {
-      // Successfully logged out, you might want to navigate to the login screen
       debugPrint('Successfully logged out');
     } else {
-      // Handle error
       debugPrint('Error logging out: ${(result as Error).error}');
-      // You can show a dialog or a snackbar with the error message
     }
 
     _isLoading = false;

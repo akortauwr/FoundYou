@@ -15,7 +15,6 @@ import 'package:found_you_app/ui/chats/view_models/chats_view_model.dart';
 import 'package:found_you_app/ui/chats/views/chats_view.dart';
 import 'package:found_you_app/ui/conversation/view_models/conversation_view_model.dart';
 import 'package:found_you_app/ui/conversation/views/conversation_view.dart';
-
 import 'package:found_you_app/ui/home/view_models/home_view_model.dart';
 import 'package:found_you_app/ui/home/views/home_view.dart';
 import 'package:found_you_app/ui/home_shell/view_models/home_shell_view_model.dart';
@@ -27,7 +26,6 @@ import 'package:found_you_app/ui/profile/views/profile_view.dart';
 import 'package:found_you_app/ui/recent_likes/view_models/recent_likes_view_model.dart';
 import 'package:found_you_app/ui/swiping/view_models/friend_swipe_view_model.dart';
 import 'package:found_you_app/ui/swiping/views/friend_swipe_view.dart';
-import 'package:found_you_app/ui/test/test1/views/test1_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -39,7 +37,6 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
   redirect: _redirect,
   refreshListenable: authRepository,
   routes: [
-    // 1) ShellRoute – to będzie Twój wspólny Scaffold z bottom nav
     ShellRoute(
       builder: (context, state, child) {
         return ChangeNotifierProvider(
@@ -48,14 +45,10 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
         );
       },
       routes: [
-        // 2) Pod ścieżkami shell-a umieszczasz tylko te ekrany,
-        //    które mają wspólny bottom bar:
         GoRoute(
           path: Paths.home,
           name: 'home',
           pageBuilder: (ctx, st) {
-            // Tu wstrzykujemy repozytorium dla SuggestedFriendsRepository
-            // za pomocą .read<SuggestedFriendsRepository>() na kontekście.
             return NoTransitionPage(
               child: MultiProvider(
                 providers: [
@@ -95,7 +88,7 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
               (ctx, st) => NoTransitionPage(
                 child: ChangeNotifierProvider(
                   create: (_) => UserSwipeViewModel(repository: ctx.read())..loadUsers(),
-                  child: UserSwipeView(),
+                  child: const UserSwipeView(),
                 ),
               ),
         ),
@@ -107,49 +100,39 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
                 child: ChangeNotifierProvider(
                   create:
                       (_) => ProfileViewModel(profileRepository: ctx.read(), authRepository: ctx.read())..loadProfile(),
-                  child: ProfileView(),
+                  child: const ProfileView(),
                 ),
               ),
           routes: [
             GoRoute(
-              path: Paths.editData, // Ścieżka względna do profilu, np. /profile/edit-data
+              path: Paths.editData,
               name: 'editData',
               builder: (context, state) {
-                // KROK 1: Odbierz obiekt UserModel z parametru 'extra'
-                // Rzutujemy go na typ UserModel, ponieważ wiemy, co przekazaliśmy.
                 final user = state.extra as UserModel;
 
-                // KROK 2: Przekaż odebrany obiekt do ViewModelu
                 return ChangeNotifierProvider(
-                  create: (ctx) => EditDataViewModel(
-                    authRepository: ctx.read(),
-                    initialUser: user, // <-- Używamy przekazanego użytkownika zamiast null!
-                  )..loadForm(), // Od razu ładujemy i inicjalizujemy formularz
+                  create: (ctx) => EditDataViewModel(authRepository: ctx.read(), initialUser: user)..loadForm(),
                   child: const EditDataView(),
                 );
               },
             ),
-          ]
+          ],
         ),
         GoRoute(
-          path: Paths.chats, // czyli '/chats'
-          name: 'chats', // Dodajemy nazwę dla spójności
+          path: Paths.chats,
+          name: 'chats',
           pageBuilder:
               (context, state) => NoTransitionPage(
-                // Używamy pageBuilder, by nie było animacji między zakładkami
                 child: ChangeNotifierProvider(
                   create: (_) => ChatsViewModel(messengerRepository: context.read()),
                   child: const ChatsView(),
                 ),
               ),
           routes: [
-            // Zagnieżdżamy trasę konwersacji jako "dziecko" listy czatów
             GoRoute(
-              // --- ZMIANA 2: Ścieżka jest teraz WZGLĘDNA (bez '/' na początku) ---
               path: 'conversation/:chatId',
-              name: 'conversation', // Dajemy jej nazwę, np. 'conversation'
+              name: 'conversation',
               builder: (context, state) {
-                // --- ZMIANA 3: Poprawiamy nazwę parametru na 'chatId' ---
                 final chatId = int.parse(state.pathParameters['chatId']!);
                 final chatPartner = state.extra as SuggestedFriendModel;
                 return ChangeNotifierProvider(
@@ -168,7 +151,6 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
       ],
     ),
 
-    // 3) Reszta tras (logowanie, rejestracja, reset hasła, test) poza shellem:
     GoRoute(
       path: Paths.login,
       name: 'login',
@@ -184,29 +166,32 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
       builder:
           (context, state) => ChangeNotifierProvider(
             create: (ctx) => ResetPasswordViewModel(authRepository: ctx.read()),
-            child: ResetPasswordView(),
+            child: const ResetPasswordView(),
           ),
     ),
-    GoRoute(path: Paths.register, name: 'register', builder: (context, state) => const RegisterView(), routes: [
-      GoRoute(
-        path: Paths.registerForm,
-        name: 'registerForm',
-        builder: (context, state) {
-          final args = state.extra as Map<String, dynamic>;
-          return ChangeNotifierProvider(
-            create:
-                (_) =>
-            RegisterFormViewModel(authRepository: context.read())
-              ..updateField('email', args['email'])
-              ..updateField('password', args['password'])
-              ..loadForm(),
-            child: const RegisterFormPageView(),
-          );
-        },
-      ),
-    ]),
-
-    GoRoute(path: Paths.test, name: 'test', builder: (context, state) => const Test1View()),
+    GoRoute(
+      path: Paths.register,
+      name: 'register',
+      builder: (context, state) => const RegisterView(),
+      routes: [
+        GoRoute(
+          path: Paths.registerForm,
+          name: 'registerForm',
+          builder: (context, state) {
+            final args = state.extra as Map<String, dynamic>;
+            return ChangeNotifierProvider(
+              create:
+                  (_) =>
+                      RegisterFormViewModel(authRepository: context.read())
+                        ..updateField('email', args['email'])
+                        ..updateField('password', args['password'])
+                        ..loadForm(),
+              child: const RegisterFormPageView(),
+            );
+          },
+        ),
+      ],
+    ),
   ],
 );
 

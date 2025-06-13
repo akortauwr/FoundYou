@@ -11,6 +11,5 @@ abstract class LoginResponse with _$LoginResponse {
     @JsonKey(name: 'user_id') required int userId,
   }) = _LoginResponse;
 
-  factory LoginResponse.fromJson(Map<String, Object?> json) =>
-      _$LoginResponseFromJson(json);
+  factory LoginResponse.fromJson(Map<String, Object?> json) => _$LoginResponseFromJson(json);
 }

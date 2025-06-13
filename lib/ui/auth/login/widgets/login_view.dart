@@ -17,11 +17,9 @@ class LoginView extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cmd = vm.login;
       if (cmd.running) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logging in...')),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Logging in...')));
       }
-      if(cmd.result == null) {
+      if (cmd.result == null) {
         return;
       }
 
@@ -30,10 +28,7 @@ class LoginView extends StatelessWidget {
         context.go(Paths.home);
       } else if (cmd.error) {
         cmd.clearResult();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login failed')),
-        );
-        print('Login failed: ${cmd.error}');
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Login failed')));
       }
     });
 
@@ -47,10 +42,7 @@ class LoginView extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'FoundYou',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
-                ),
+                const Text('FoundYou', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 24),
 
                 // 📨 email
@@ -86,20 +78,17 @@ class LoginView extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        NeoCheckbox(
-                          value: vm.rememberMe,
-                          onChanged: vm.toggleRememberMe,
-                        ),
+                        NeoCheckbox(value: vm.rememberMe, onChanged: vm.toggleRememberMe),
                         const SizedBox(width: 8),
                         GestureDetector(
                           onTap: vm.toggleRememberMe,
-                          child: const Text('Zapamiętaj mnie', style: TextStyle(fontSize: 16),),
+                          child: const Text('Zapamiętaj mnie', style: TextStyle(fontSize: 16)),
                         ),
                       ],
                     ),
                     GestureDetector(
                       onTap: () => context.go(Paths.resetPassword),
-                      child: Text(
+                      child: const Text(
                         'Zapomniałem hasła',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                       ),
@@ -109,36 +98,27 @@ class LoginView extends StatelessWidget {
                 const SizedBox(height: 12),
 
                 // ▶️ login button
-                NeoButton(
-                  onPressed: vm.executeLogin,
-                  text: 'Zaloguj się',
-                ),
+                NeoButton(onPressed: vm.executeLogin, text: 'Zaloguj się'),
                 const SizedBox(height: 12),
 
                 // 🔗 register link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Nie masz konta?', style: TextStyle(fontSize: 16),),
+                    const Text('Nie masz konta?', style: TextStyle(fontSize: 16)),
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: () => context.go(Paths.register),
-                      child: Text(
-                        'Zarejestruj się',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
+                      child: const Text('Zarejestruj się', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                     ),
                   ],
                 ),
 
                 // 🛑 inline error text if you prefer instead of SnackBar
                 if (vm.loginError)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Text(
-                      'Login failed',
-                      style: TextStyle(color: Colors.redAccent),
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 12),
+                    child: Text('Login failed', style: TextStyle(color: Colors.redAccent)),
                   ),
               ],
             ),

@@ -6,15 +6,12 @@ part 'chat_model.freezed.dart';
 part 'chat_model.g.dart';
 
 @freezed
-abstract class ChatModel  with _$ChatModel {
+abstract class ChatModel with _$ChatModel {
   const factory ChatModel({
     required int id,
     required SuggestedFriendModel member,
-    @JsonKey(name: 'newest_message')  required MessageModel? newestMessage,
+    @JsonKey(name: 'newest_message') required MessageModel? newestMessage,
   }) = _ChatModel;
 
-  factory ChatModel.fromJson(Map<String, Object?> json) =>
-      _$ChatModelFromJson(json);
+  factory ChatModel.fromJson(Map<String, Object?> json) => _$ChatModelFromJson(json);
 }
-
-

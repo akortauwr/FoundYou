@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:found_you_app/data/repositories/auth/auth_repository.dart';
-import 'package:found_you_app/utils/command.dart';
 import 'package:found_you_app/utils/result.dart';
 
-class ResetPasswordViewModel extends ChangeNotifier{
+class ResetPasswordViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
-  ResetPasswordViewModel({required AuthRepository authRepository})
-      : _authRepository = authRepository;
+
+  ResetPasswordViewModel({required AuthRepository authRepository}) : _authRepository = authRepository;
 
   final oldPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
@@ -16,7 +15,7 @@ class ResetPasswordViewModel extends ChangeNotifier{
 
   bool get resetError => _resetError;
 
-  void reset(){
+  void reset() {
     _resetError = false;
     notifyListeners();
 
@@ -37,5 +36,4 @@ class ResetPasswordViewModel extends ChangeNotifier{
       notifyListeners();
     });
   }
-
 }

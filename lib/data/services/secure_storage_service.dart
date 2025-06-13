@@ -10,7 +10,7 @@ class SecureStorageService {
 
   SecureStorageService._internal();
 
-  final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
   static const _accessTokenKey = 'access_token';
   static const _refreshTokenKey = 'refresh_token';
@@ -34,13 +34,10 @@ class SecureStorageService {
       if (T == double) {
         return Result.ok(double.parse(raw) as T);
       }
-      // Try JSON decode for complex types
       try {
         final decoded = jsonDecode(raw);
         return Result.ok(decoded as T);
-      } catch (_) {
-        // fallback to string
-      }
+      } catch (_) {}
       return Result.ok(raw as T);
     } catch (e) {
       return Result.error(Exception('Storage read error for key "$key": $e'));

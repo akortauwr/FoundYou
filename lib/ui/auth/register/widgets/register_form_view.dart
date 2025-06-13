@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:found_you_app/ui/auth/register/view_models/register_form_view_model.dart';
 import 'package:found_you_app/ui/common_widgets/form_field_widget.dart';
-import 'package:found_you_app/ui/common_widgets/neo_button.dart';
 import 'package:found_you_app/ui/common_widgets/neo_card.dart';
 import 'package:found_you_app/ui/common_widgets/neo_icon_buttons.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
@@ -9,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class RegisterFormPageView extends StatefulWidget {
-  const RegisterFormPageView({Key? key}) : super(key: key);
+  const RegisterFormPageView({super.key});
 
   @override
   State<RegisterFormPageView> createState() => _RegisterFormPageViewState();
@@ -26,16 +25,16 @@ class _RegisterFormPageViewState extends State<RegisterFormPageView> {
 
   void nextPage() {
     if (_currentPage < context.read<RegisterFormViewModel>().fields!.length - 1) {
-      _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+      _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
     }
   }
 
   void previousPage() {
-    if(_currentPage == 0){
+    if (_currentPage == 0) {
       context.pop();
     }
     if (_currentPage > 0) {
-      _pageController.previousPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+      _pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
     }
   }
 
@@ -73,7 +72,7 @@ class _RegisterFormPageViewState extends State<RegisterFormPageView> {
                         Expanded(
                           child: PageView.builder(
                             controller: _pageController,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             onPageChanged: (page) => setState(() => _currentPage = page),
                             itemCount: vm.fields!.length,
                             itemBuilder: (context, index) {
@@ -83,10 +82,10 @@ class _RegisterFormPageViewState extends State<RegisterFormPageView> {
                                 children: [
                                   Text(
                                     field.label,
-                                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                                     textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(height: 16),
+                                  const SizedBox(height: 16),
                                   FormFieldWidget(
                                     formField: field,
                                     onChanged: (value) => vm.updateField(field.name, value),
@@ -97,14 +96,14 @@ class _RegisterFormPageViewState extends State<RegisterFormPageView> {
                             },
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             NeoIconButton(
                               onPressed: previousPage,
-                              child: Icon(Icons.arrow_back),
-                              shadowOffset: Offset(6, 6),
+                              shadowOffset: const Offset(6, 6),
+                              child: const Icon(Icons.arrow_back),
                             ),
                             NeoIconButton(
                               onPressed:
@@ -115,7 +114,7 @@ class _RegisterFormPageViewState extends State<RegisterFormPageView> {
                                         } else {
                                           ScaffoldMessenger.of(
                                             context,
-                                          ).showSnackBar(SnackBar(content: Text('Uzupełnij wymagane pola!')));
+                                          ).showSnackBar(const SnackBar(content: Text('Uzupełnij wymagane pola!')));
                                         }
                                       }
                                       : nextPage,

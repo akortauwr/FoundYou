@@ -5,8 +5,8 @@ import 'package:found_you_app/utils/result.dart';
 
 class RegisterFormViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
-  RegisterFormViewModel({required AuthRepository authRepository})
-      : _authRepository = authRepository;
+
+  RegisterFormViewModel({required AuthRepository authRepository}) : _authRepository = authRepository;
 
   List<FormFieldModel>? _fields;
 
@@ -26,18 +26,13 @@ class RegisterFormViewModel extends ChangeNotifier {
         _fields = ok.value;
         break;
       case Error<List<FormFieldModel>> error:
-        // Handle error
         debugPrint('Error loading form fields: ${error.error}');
-        // You can show a dialog or a snackbar with the error message
-        // For example:
-        debugPrintStack(label: 'Error loading form fields', stackTrace: StackTrace.current);
         break;
     }
 
     _isLoading = false;
     notifyListeners();
   }
-
 
   final Map<String, dynamic> _formData = {};
 
@@ -80,17 +75,14 @@ class RegisterFormViewModel extends ChangeNotifier {
   void register() {
     _authRepository.register(data: _formData).then((result) {
       switch (result) {
-        case Ok<void> ok:
-          // Handle success
+        case Ok<void> _:
+          //TODO
           debugPrint('Registration successful');
           break;
         case Error<void> error:
-          // Handle error
           debugPrint('Error registering: ${error.error}');
           break;
       }
     });
   }
-
-
 }

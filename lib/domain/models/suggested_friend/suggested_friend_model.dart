@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'suggested_friend_model.freezed.dart';
 part 'suggested_friend_model.g.dart';
 
-
 @freezed
 abstract class SuggestedFriendModel with _$SuggestedFriendModel {
   const factory SuggestedFriendModel({

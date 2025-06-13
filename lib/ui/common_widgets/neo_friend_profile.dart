@@ -3,13 +3,10 @@ import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_mo
 import 'package:found_you_app/ui/common_widgets/neo_card.dart';
 import 'package:found_you_app/ui/common_widgets/neo_select_display.dart';
 
-class NeoFriendProfile extends StatelessWidget{
+class NeoFriendProfile extends StatelessWidget {
   final SuggestedFriendModel user;
 
-  const NeoFriendProfile({
-    super.key,
-    required this.user,
-  });
+  const NeoFriendProfile({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +20,12 @@ class NeoFriendProfile extends StatelessWidget{
         children: [
           Positioned.fill(
             child:
-            user.imageUrl != null
-                ? Image.network(user.imageUrl!, fit: BoxFit.cover)
-                : Container(
-              color: Colors.grey[300],
-              child: const Icon(Icons.person, size: 100, color: Colors.grey),
-            ),
+                user.imageUrl != null
+                    ? Image.network(user.imageUrl!, fit: BoxFit.cover)
+                    : Container(
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.person, size: 100, color: Colors.grey),
+                    ),
           ),
           Positioned(
             bottom: 0,
@@ -52,7 +49,6 @@ class NeoFriendProfile extends StatelessWidget{
                   const SizedBox(height: 4),
                   NeoSelectDisplay(labels: user.passions, maxToShow: 5),
                   const SizedBox(height: 8),
-                  // Action buttons: like and decline
                 ],
               ),
             ),
