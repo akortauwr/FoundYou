@@ -16,7 +16,25 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserModel {
 
- int get id; String get email; String get username; DateTime get birthday; String get bio;@JsonKey(name: 'image_url') String? get imageUrl; List<String> get passions;@JsonKey(name: 'created_at') DateTime get createdAt;@JsonKey(name: 'match_count') int get friendCount; String get sex;
+  int get id;
+
+  String get email;
+
+  String get username;
+
+  String get birthday;
+
+  String get bio;
+
+  @JsonKey(name: 'image_url') String? get imageUrl;
+
+  List<String> get passions;
+
+  @JsonKey(name: 'created_at') DateTime get createdAt;
+
+  @JsonKey(name: 'match_count') int get friendCount;
+
+  String get sex;
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +67,9 @@ abstract mixin class $UserModelCopyWith<$Res>  {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) _then) = _$UserModelCopyWithImpl;
 @useResult
 $Res call({
- int id, String email, String username, DateTime birthday, String bio,@JsonKey(name: 'image_url') String? imageUrl, List<String> passions,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'match_count') int friendCount, String sex
+  int id, String email, String username, String birthday, String bio, @JsonKey(
+      name: 'image_url') String? imageUrl, List<String> passions, @JsonKey(
+      name: 'created_at') DateTime createdAt, @JsonKey(name: 'match_count') int friendCount, String sex
 });
 
 
@@ -72,7 +92,8 @@ id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,birthday: null == birthday ? _self.birthday : birthday // ignore: cast_nullable_to_non_nullable
-as DateTime,bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+  as String,
+    bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
 as String,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
 as String?,passions: null == passions ? _self.passions : passions // ignore: cast_nullable_to_non_nullable
 as List<String>,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
@@ -95,7 +116,7 @@ class _UserModel implements UserModel {
 @override final  int id;
 @override final  String email;
 @override final  String username;
-@override final  DateTime birthday;
+  @override final String birthday;
 @override final  String bio;
 @override@JsonKey(name: 'image_url') final  String? imageUrl;
  final  List<String> _passions;
@@ -142,7 +163,9 @@ abstract mixin class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Re
   factory _$UserModelCopyWith(_UserModel value, $Res Function(_UserModel) _then) = __$UserModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String email, String username, DateTime birthday, String bio,@JsonKey(name: 'image_url') String? imageUrl, List<String> passions,@JsonKey(name: 'created_at') DateTime createdAt,@JsonKey(name: 'match_count') int friendCount, String sex
+  int id, String email, String username, String birthday, String bio, @JsonKey(
+      name: 'image_url') String? imageUrl, List<String> passions, @JsonKey(
+      name: 'created_at') DateTime createdAt, @JsonKey(name: 'match_count') int friendCount, String sex
 });
 
 
@@ -165,7 +188,8 @@ id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,birthday: null == birthday ? _self.birthday : birthday // ignore: cast_nullable_to_non_nullable
-as DateTime,bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+  as String,
+    bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
 as String,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
 as String?,passions: null == passions ? _self._passions : passions // ignore: cast_nullable_to_non_nullable
 as List<String>,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable

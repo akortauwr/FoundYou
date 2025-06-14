@@ -13,4 +13,6 @@ abstract class SuggestedFriendsRepository {
   Future<Result<void>> likeUser(int userId);
 
   Future<Result<void>> dislikeUser(int userId);
+
+  Future<Result<void>> deleteFriend(int userId);
 }

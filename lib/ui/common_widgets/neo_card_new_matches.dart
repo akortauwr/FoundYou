@@ -33,24 +33,20 @@ class NeoCardNewMatches extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            NeoIconButton(
-                              backgroundColor: NeoColors.tomatoRed,
-                              onPressed: () => Navigator.of(context).pop(),
-                              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
-                              child: const Icon(Icons.close),
-                            ),
-                            NeoIconButton(
-                              backgroundColor: NeoColors.springGreen,
-                              onPressed: () {
-                                onPressed();
-                                Navigator.of(context).pop();
-                              },
-                              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
-                              child: const Stack(
-                                children: [
-                                  Icon(Icons.chat_bubble, color: Colors.white, size: 32),
-                                  Icon(Icons.chat_bubble_outline, color: Colors.black, size: 32),
-                                ],
+                            Expanded(
+                              child: NeoIconButton(
+                                backgroundColor: NeoColors.springGreen,
+                                onPressed: () {
+                                  onPressed();
+                                  Navigator.of(context).pop();
+                                },
+                                padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                                child: const Stack(
+                                  children: [
+                                    Icon(Icons.chat_bubble, color: Colors.white, size: 32),
+                                    Icon(Icons.chat_bubble_outline, color: Colors.black, size: 32),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

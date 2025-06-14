@@ -10,7 +10,7 @@ abstract class UserModel with _$UserModel {
     required int id,
     required String email,
     required String username,
-    required DateTime birthday,
+    required String birthday,
     required String bio,
 
     @JsonKey(name: 'image_url') String? imageUrl,

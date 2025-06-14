@@ -49,4 +49,14 @@ class ProfileViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  Future<void> deleteAccount() async {
+    final result = await _profileRepository.deleteProfile();
+    if (result is Ok<void>) {
+      debugPrint('Successfully deleted account');
+      await logout();
+    } else {
+      debugPrint('Error deleting account: ${(result as Error).error}');
+    }
+  }
 }

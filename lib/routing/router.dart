@@ -7,6 +7,7 @@ import 'package:found_you_app/ui/auth/edit_data/views/edit_data_view.dart';
 import 'package:found_you_app/ui/auth/login/view_models/login_view_model.dart';
 import 'package:found_you_app/ui/auth/login/widgets/login_view.dart';
 import 'package:found_you_app/ui/auth/register/view_models/register_form_view_model.dart';
+import 'package:found_you_app/ui/auth/register/view_models/register_view_model.dart';
 import 'package:found_you_app/ui/auth/register/widgets/register_form_view.dart';
 import 'package:found_you_app/ui/auth/register/widgets/register_view.dart';
 import 'package:found_you_app/ui/auth/reset_password/view_models/reset_password_view_model.dart';
@@ -23,6 +24,8 @@ import 'package:found_you_app/ui/near_you/view_models/near_you_view_model.dart';
 import 'package:found_you_app/ui/new_matches/view_models/new_matches_view_model.dart';
 import 'package:found_you_app/ui/profile/view_models/profile_view_model.dart';
 import 'package:found_you_app/ui/profile/views/profile_view.dart';
+import 'package:found_you_app/ui/profile/views/rules.dart';
+import 'package:found_you_app/ui/profile/views/terms.dart';
 import 'package:found_you_app/ui/recent_likes/view_models/recent_likes_view_model.dart';
 import 'package:found_you_app/ui/swiping/view_models/friend_swipe_view_model.dart';
 import 'package:found_you_app/ui/swiping/views/friend_swipe_view.dart';
@@ -105,6 +108,20 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
               ),
           routes: [
             GoRoute(
+              path: Paths.rules,
+              name: 'rules',
+              builder: (context, state) {
+                return const RulesView();
+              },
+            ),
+            GoRoute(
+              path: Paths.termsOfUse,
+              name: 'termsOfUse',
+              builder: (context, state) {
+                return const TermsOfUseView();
+              },
+            ),
+            GoRoute(
               path: Paths.editData,
               name: 'editData',
               builder: (context, state) {
@@ -165,14 +182,19 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
       name: 'resetPassword',
       builder:
           (context, state) => ChangeNotifierProvider(
-            create: (ctx) => ResetPasswordViewModel(authRepository: ctx.read()),
+            create: (ctx) => ResetPasswordViewModel(repository: ctx.read()),
             child: const ResetPasswordView(),
           ),
     ),
     GoRoute(
       path: Paths.register,
       name: 'register',
-      builder: (context, state) => const RegisterView(),
+      builder:
+          (context, state) =>
+          ChangeNotifierProvider(
+            create: (ctx) => RegisterViewModel(),
+            child: const RegisterView(),
+          ),
       routes: [
         GoRoute(
           path: Paths.registerForm,

@@ -55,7 +55,7 @@ class ResetPasswordView extends StatelessWidget {
                 if (vm.resetError)
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text('Error resetting password', style: TextStyle(color: Colors.red)),
+                    child: Text('Błąd podczas zmiany hasła', style: TextStyle(color: Colors.red)),
                   ),
               ],
             ),

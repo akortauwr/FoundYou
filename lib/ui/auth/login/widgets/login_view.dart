@@ -17,7 +17,7 @@ class LoginView extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cmd = vm.login;
       if (cmd.running) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Logging in...')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Logowanie w toku...')));
       }
       if (cmd.result == null) {
         return;
@@ -28,7 +28,7 @@ class LoginView extends StatelessWidget {
         context.go(Paths.home);
       } else if (cmd.error) {
         cmd.clearResult();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Login failed')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Błąd podczas logowania')));
       }
     });
 
@@ -45,63 +45,27 @@ class LoginView extends StatelessWidget {
                 const Text('FoundYou', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 24),
 
-                // 📨 email
-                // TextField(
-                //   controller: vm.emailController,
-                //   decoration: InputDecoration(
-                //     labelText: 'Email',
-                //     border: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(12),
-                //     ),
-                //   ),
-                // ),
                 NeoTextField(controller: vm.emailController, label: 'Email', keyboardType: TextInputType.emailAddress),
                 const SizedBox(height: 12),
 
-                // 🔒 password
-                // TextField(
-                //   controller: vm.passwordController,
-                //   decoration: InputDecoration(
-                //     labelText: 'Hasło',
-                //     border: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(12),
-                //       borderSide: const BorderSide(color: Colors.black, width: 4)
-                //     ),
-                //   ),
-                //   obscureText: true,
-                // ),
                 NeoTextField(controller: vm.passwordController, label: 'Hasło', obscureText: true),
                 const SizedBox(height: 12),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        NeoCheckbox(value: vm.rememberMe, onChanged: vm.toggleRememberMe),
-                        const SizedBox(width: 8),
-                        GestureDetector(
-                          onTap: vm.toggleRememberMe,
-                          child: const Text('Zapamiętaj mnie', style: TextStyle(fontSize: 16)),
-                        ),
-                      ],
-                    ),
+                    NeoCheckbox(value: vm.rememberMe, onChanged: vm.toggleRememberMe),
+                    const SizedBox(width: 8),
                     GestureDetector(
-                      onTap: () => context.go(Paths.resetPassword),
-                      child: const Text(
-                        'Zapomniałem hasła',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
+                      onTap: vm.toggleRememberMe,
+                      child: const Text('Zapamiętaj mnie', style: TextStyle(fontSize: 16)),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
 
-                // ▶️ login button
                 NeoButton(onPressed: vm.executeLogin, text: 'Zaloguj się'),
                 const SizedBox(height: 12),
 
-                // 🔗 register link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -114,11 +78,10 @@ class LoginView extends StatelessWidget {
                   ],
                 ),
 
-                // 🛑 inline error text if you prefer instead of SnackBar
                 if (vm.loginError)
                   const Padding(
                     padding: EdgeInsets.only(top: 12),
-                    child: Text('Login failed', style: TextStyle(color: Colors.redAccent)),
+                    child: Text('Błąd podczas logowania', style: TextStyle(color: Colors.redAccent)),
                   ),
               ],
             ),

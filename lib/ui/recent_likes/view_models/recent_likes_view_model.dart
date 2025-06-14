@@ -43,4 +43,14 @@ class RecentLikesViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> dislikeUser(int userId) async {
+    final result = await _repository.dislikeUser(userId);
+    if (result is Error) {
+      debugPrint('Error disliking user: ${result.error}');
+    } else {
+      _suggestedFriends.removeWhere((f) => f.id == userId);
+      notifyListeners();
+    }
+  }
 }

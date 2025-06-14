@@ -37,4 +37,9 @@ class SuggestedFriendsRepositoryNetwork extends SuggestedFriendsRepository {
   Future<Result<void>> dislikeUser(int userId) async {
     return await apiClient.dislikeUser(userId);
   }
+
+  @override
+  Future<Result<void>> deleteFriend(int userId) async {
+    return await apiClient.deleteFriend(userId);
+  }
 }

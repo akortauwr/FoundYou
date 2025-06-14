@@ -11,4 +11,6 @@ final class Paths {
   static const conversations = '/conversations';
   static const chats = '/chats';
   static const editData = '/edit-data';
+  static const rules = '/rules';
+  static const termsOfUse = '/terms-of-use';
 }

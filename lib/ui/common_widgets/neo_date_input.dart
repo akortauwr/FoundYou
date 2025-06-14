@@ -14,8 +14,9 @@ class SingleDigitTextInputFormatter extends TextInputFormatter {
 class NeoDateInput extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final String? initialValue;
+  final String? errorText;
 
-  const NeoDateInput({super.key, required this.onChanged, this.initialValue});
+  const NeoDateInput({super.key, required this.onChanged, this.initialValue, this.errorText});
 
   @override
   State<NeoDateInput> createState() => _NeoDateInputState();
@@ -30,9 +31,10 @@ class _NeoDateInputState extends State<NeoDateInput> {
   @override
   void initState() {
     super.initState();
-    if (widget.initialValue != null && widget.initialValue!.length == 8) {
+    if (widget.initialValue != null) {
+      final initial = widget.initialValue!.padRight(8);
       for (int i = 0; i < 8; i++) {
-        _controllers[i].text = widget.initialValue![i];
+        _controllers[i].text = initial[i];
       }
     }
 
@@ -63,9 +65,13 @@ class _NeoDateInputState extends State<NeoDateInput> {
   }
 
   Widget _buildBox(int index, String label) {
+    final hasError = widget.errorText != null && widget.errorText!.isNotEmpty;
     final focused = _fieldNodes[index].hasFocus;
     final content = _controllers[index].text.isNotEmpty ? _controllers[index].text : (!focused ? label : '');
     final offset = focused ? const Offset(0.5, 0.5) : const Offset(3, 3);
+
+    final borderColor = hasError ? Colors.red : Colors.black;
+    final shadowColor = hasError ? Colors.red.withValues(alpha: 0.7) : Colors.black;
 
     return GestureDetector(
       onTap: () => _fieldNodes[index].requestFocus(),
@@ -77,8 +83,8 @@ class _NeoDateInputState extends State<NeoDateInput> {
         margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         decoration: BoxDecoration(
           color: _bgColors[index] ?? Colors.white,
-          border: Border.all(color: Colors.black, width: 3),
-          boxShadow: [BoxShadow(color: Colors.black, offset: offset)],
+          border: Border.all(color: borderColor, width: 3),
+          boxShadow: [BoxShadow(color: shadowColor, offset: offset)],
         ),
         alignment: Alignment.center,
         child: KeyboardListener(
@@ -125,7 +131,10 @@ class _NeoDateInputState extends State<NeoDateInput> {
 
   @override
   Widget build(BuildContext context) {
+    final hasError = widget.errorText != null && widget.errorText!.isNotEmpty;
+
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -136,7 +145,8 @@ class _NeoDateInputState extends State<NeoDateInput> {
               width: 16,
               height: 8,
               margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              color: Colors.black,
+
+              color: hasError ? Colors.red : Colors.black,
             ),
             _buildBox(2, 'M'),
             _buildBox(3, 'M'),
@@ -147,6 +157,16 @@ class _NeoDateInputState extends State<NeoDateInput> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [_buildBox(4, 'Y'), _buildBox(5, 'Y'), _buildBox(6, 'Y'), _buildBox(7, 'Y')],
         ),
+
+        if (hasError)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              widget.errorText!,
+              style: const TextStyle(color: Colors.red, fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          ),
       ],
     );
   }

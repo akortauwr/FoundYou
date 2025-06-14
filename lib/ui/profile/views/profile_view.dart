@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:found_you_app/domain/models/user_model/user_model.dart';
 import 'package:found_you_app/routing/paths.dart';
 import 'package:found_you_app/ui/common_widgets/neo_card.dart';
+import 'package:found_you_app/ui/common_widgets/neo_dialog.dart';
 import 'package:found_you_app/ui/common_widgets/neo_icon_buttons.dart';
 import 'package:found_you_app/ui/common_widgets/neo_select_display.dart';
 import 'package:found_you_app/ui/core/colors/neo_colors.dart';
@@ -26,8 +27,11 @@ class ProfileView extends StatelessWidget {
     }
 
     final today = DateTime.now();
-    int age = today.year - user.birthday.year;
-    if (today.month < user.birthday.month || (today.month == user.birthday.month && today.day < user.birthday.day)) {
+
+    final DateTime birthDate = DateTime.parse(user.birthday);
+
+    int age = today.year - birthDate.year;
+    if (today.month < birthDate.month || (today.month == birthDate.month && today.day < birthDate.day)) {
       age--;
     }
 
@@ -48,14 +52,27 @@ class ProfileView extends StatelessWidget {
                   vm.logout();
                   context.go(Paths.login);
                 },
-                onTermsOfService: () {
-                  Navigator.pushNamed(context, '/terms');
+                onTermsOfUse: () {
+                  context.push('/profile${Paths.termsOfUse}');
                 },
                 onRules: () {
-                  Navigator.pushNamed(context, '/rules');
+                  context.push('/profile${Paths.rules}');
                 },
-                onEditProfile: () {
-                  context.pushNamed('editData', extra: user);
+                deleteAccount: () async {
+                  final bool? delete = await showDialog(
+                    context: context,
+                    builder:
+                        (context) => Center(
+                          child: NeoDialog(
+                            content:
+                                'Czy na pewno chcesz usunąć '
+                                'konto?',
+                          ),
+                        ),
+                  );
+                  if (delete == true) {
+                    await vm.deleteAccount();
+                  }
                 },
               ),
             ],
@@ -133,17 +150,17 @@ class ProfileInfoCard extends StatelessWidget {
 class SettingsCard extends StatelessWidget {
   final VoidCallback onChangePassword;
   final VoidCallback onLogout;
-  final VoidCallback onTermsOfService;
+  final VoidCallback onTermsOfUse;
   final VoidCallback onRules;
-  final VoidCallback onEditProfile;
+  final VoidCallback deleteAccount;
 
   const SettingsCard({
     super.key,
     required this.onChangePassword,
     required this.onLogout,
-    required this.onTermsOfService,
+    required this.onTermsOfUse,
     required this.onRules,
-    required this.onEditProfile,
+    required this.deleteAccount,
   });
 
   @override
@@ -157,25 +174,35 @@ class SettingsCard extends StatelessWidget {
         children: [
           _buildTile(icon: Icons.lock, title: 'Zmień hasło', onTap: onChangePassword),
           const SizedBox(height: 16),
-          _buildTile(icon: Icons.description, title: 'Regulamin', onTap: onTermsOfService),
+          _buildTile(icon: Icons.description, title: 'Regulamin', onTap: onRules),
           const SizedBox(height: 16),
-          _buildTile(icon: Icons.rule, title: 'Zasady korzystania', onTap: onRules),
+          _buildTile(icon: Icons.rule, title: 'Zasady korzystania', onTap: onTermsOfUse),
 
           const SizedBox(height: 16),
-          _buildTile(icon: Icons.edit, title: 'Edytuj dane', onTap: onEditProfile),
-          const SizedBox(height: 16),
           _buildTile(icon: Icons.logout, title: 'Wyloguj się', onTap: onLogout),
+          const SizedBox(height: 16),
+          _buildTile(
+            icon: Icons.delete_forever,
+            title: 'Usuń konto',
+            onTap: deleteAccount,
+            backgroundColor: NeoColors.tomatoRed,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTile({required IconData icon, required String title, required VoidCallback onTap}) {
+  Widget _buildTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    Color backgroundColor = NeoColors.mossGreen,
+  }) {
     return Row(
       children: [
         NeoIconButton(
           onPressed: onTap,
-          backgroundColor: NeoColors.mossGreen,
+          backgroundColor: backgroundColor,
           shadowOffset: const Offset(4, 4),
           child: Icon(icon, size: 24),
         ),

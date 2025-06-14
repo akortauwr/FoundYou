@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:found_you_app/routing/paths.dart';
 import 'package:found_you_app/ui/auth/register/view_models/register_form_view_model.dart';
 import 'package:found_you_app/ui/common_widgets/form_field_widget.dart';
 import 'package:found_you_app/ui/common_widgets/neo_card.dart';
@@ -77,6 +78,9 @@ class _RegisterFormPageViewState extends State<RegisterFormPageView> {
                             itemCount: vm.fields!.length,
                             itemBuilder: (context, index) {
                               final field = vm.fields![index];
+
+                              final error = vm.errors[field.name];
+
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -90,6 +94,8 @@ class _RegisterFormPageViewState extends State<RegisterFormPageView> {
                                     formField: field,
                                     onChanged: (value) => vm.updateField(field.name, value),
                                     value: vm.getFieldValue(field.name),
+
+                                    errorText: error,
                                   ),
                                 ],
                               );
@@ -108,13 +114,28 @@ class _RegisterFormPageViewState extends State<RegisterFormPageView> {
                             NeoIconButton(
                               onPressed:
                                   _currentPage == vm.fields!.length - 1
-                                      ? () {
+                                      ? () async {
                                         if (vm.validate()) {
-                                          vm.register();
+                                          final approved = await vm.register();
+                                          if (!context.mounted) return;
+                                          if (approved) {
+                                            context.go(Paths.login);
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                content: Text('Rejestracja zakończona sukcesem! Możesz się zalogować.'),
+                                              ),
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                content: Text('Wystąpił błąd podczas rejestracji. Spróbuj ponownie.'),
+                                              ),
+                                            );
+                                          }
                                         } else {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(const SnackBar(content: Text('Uzupełnij wymagane pola!')));
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('Uzupełnij wymagane pola lub popraw błędy!')),
+                                          );
                                         }
                                       }
                                       : nextPage,

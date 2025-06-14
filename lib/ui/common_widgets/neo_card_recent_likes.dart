@@ -7,9 +7,10 @@ import 'package:found_you_app/ui/core/colors/neo_colors.dart';
 
 class NeoCardRecentLikes extends StatelessWidget {
   final SuggestedFriendModel friend;
-  final VoidCallback onTap;
+  final VoidCallback onLike;
+  final VoidCallback onDisslike;
 
-  const NeoCardRecentLikes({super.key, required this.friend, required this.onTap});
+  const NeoCardRecentLikes({super.key, required this.friend, required this.onLike, required this.onDisslike});
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +37,17 @@ class NeoCardRecentLikes extends StatelessWidget {
                           children: [
                             NeoIconButton(
                               backgroundColor: NeoColors.tomatoRed,
-                              onPressed: () => Navigator.of(context).pop(),
+                              onPressed: () {
+                                onDisslike();
+                                Navigator.of(context).pop();
+                              },
                               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                               child: const Icon(Icons.close),
                             ),
                             NeoIconButton(
                               backgroundColor: NeoColors.springGreen,
                               onPressed: () {
-                                onTap();
+                                onLike();
                                 Navigator.of(context).pop();
                               },
                               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),

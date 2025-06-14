@@ -70,30 +70,11 @@ class AuthApiClient {
 
   Future<Result<void>> register({required Map<String, dynamic> data}) async {
     try {
-      data['birthday'] = (data['birthday'] as DateTime).toIso8601String();
       final response = await _dio.post('/api/users/', data: data);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return Result.ok(null);
       } else {
         return Result.error(Exception('Failed to register'));
-      }
-    } on DioException catch (e) {
-      return Result.error(mapDioError(e));
-    } catch (e) {
-      return Result.error(Exception('Unknown error: $e'));
-    }
-  }
-
-  Future<Result<void>> resetPassword({required String oldPassword, required String newPassword}) async {
-    try {
-      final response = await _dio.post(
-        '/api/users/reset_password/',
-        data: {'old_password': oldPassword, 'new_password': newPassword},
-      );
-      if (response.statusCode == 200) {
-        return Result.ok(null);
-      } else {
-        return Result.error(Exception('Failed to reset password'));
       }
     } on DioException catch (e) {
       return Result.error(mapDioError(e));

@@ -13,7 +13,7 @@ class LogoutViewModel {
   Future<Result<void>> _logout() async {
     final result = await _authRepository.logout();
     if (result is Error<void>) {
-      // TODO Handle error
+      return Result.error(result.error);
     }
     return result;
   }

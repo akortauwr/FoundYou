@@ -38,12 +38,14 @@ class RecentLikesView extends StatelessWidget {
               final friend = vm.suggestedFriends[index];
               return NeoCardRecentLikes(
                 friend: friend,
-                onTap: () {
+                onLike: () {
                   vm.likeUser(friend.id);
+                },
+                onDisslike: () {
+                  vm.dislikeUser(friend.id);
                 },
               );
             },
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
           ),
         ),
       ],

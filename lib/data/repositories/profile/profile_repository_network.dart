@@ -12,4 +12,17 @@ class ProfileRepositoryNetwork extends ProfileRepository {
   Future<Result<UserModel>> loadProfile() async {
     return await apiClient.getProfile();
   }
+
+  @override
+  Future<Result<void>> deleteProfile() async {
+    return await apiClient.deleteProfile();
+  }
+
+  @override
+  Future<Result<void>> resetPassword({required String newPassword, required String oldPassword}) async {
+    return await apiClient.resetPassword(
+      newPassword: newPassword,
+      oldPassword: oldPassword,
+    );
+  }
 }

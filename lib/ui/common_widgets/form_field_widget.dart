@@ -16,7 +16,9 @@ class FormFieldWidget extends StatefulWidget {
   final ValueChanged<dynamic> onChanged;
   final dynamic value;
 
-  const FormFieldWidget({super.key, required this.formField, required this.onChanged, this.value});
+  final String? errorText;
+
+  const FormFieldWidget({super.key, required this.formField, required this.onChanged, this.value, this.errorText});
 
   @override
   State<FormFieldWidget> createState() => _FormFieldWidgetState();
@@ -28,7 +30,6 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
   @override
   void initState() {
     super.initState();
-
     if (widget.formField.type == FormFieldType.textfield || widget.formField.type == FormFieldType.textarea) {
       _textController = TextEditingController(text: widget.value as String?);
     }
@@ -37,7 +38,6 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
   @override
   void didUpdateWidget(FormFieldWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-
     if (_textController != null && widget.value != _textController!.text) {
       _textController!.text = widget.value as String? ?? '';
     }
@@ -75,7 +75,11 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
       case FormFieldType.date:
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: NeoDateInput(onChanged: widget.onChanged, initialValue: widget.value),
+          child: NeoDateInput(
+            onChanged: widget.onChanged,
+            initialValue: widget.value as String?,
+            errorText: widget.errorText,
+          ),
         );
 
       case FormFieldType.photo:

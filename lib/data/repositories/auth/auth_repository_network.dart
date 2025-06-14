@@ -99,11 +99,6 @@ class AuthRepositoryNetwork extends AuthRepository {
     return Result.error(Exception('No stored credentials found'));
   }
 
-  @override
-  Future<Result<void>> resetPassword({required String oldPassword, required String newPassword}) async {
-    // TODO: implement resetPassword
-    throw UnimplementedError();
-  }
 
   @override
   Future<Result<List<FormFieldModel>>> getRegisterFormFields() async{

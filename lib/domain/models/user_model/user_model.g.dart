@@ -14,7 +14,7 @@ _UserModel _$UserModelFromJson(Map<String, dynamic> json) => $checkedCreate(
       id: $checkedConvert('id', (v) => (v as num).toInt()),
       email: $checkedConvert('email', (v) => v as String),
       username: $checkedConvert('username', (v) => v as String),
-      birthday: $checkedConvert('birthday', (v) => DateTime.parse(v as String)),
+      birthday: $checkedConvert('birthday', (v) => v as String),
       bio: $checkedConvert('bio', (v) => v as String),
       imageUrl: $checkedConvert('image_url', (v) => v as String?),
       passions: $checkedConvert(
@@ -42,7 +42,7 @@ Map<String, dynamic> _$UserModelToJson(_UserModel instance) =>
       'id': instance.id,
       'email': instance.email,
       'username': instance.username,
-      'birthday': instance.birthday.toIso8601String(),
+      'birthday': instance.birthday,
       'bio': instance.bio,
       'image_url': instance.imageUrl,
       'passions': instance.passions,

@@ -169,4 +169,42 @@ class FoundYouApiClient {
       return Result.error(Exception('Nie udało się utworzyć czatu: $e'));
     }
   }
+
+  Future<Result<void>> deleteProfile() async {
+    try {
+      await apiClient.delete('/api/me/');
+      return Result.ok(null);
+    } on DioException catch (e) {
+      return Result.error(Exception('Nie udało się usunąć profilu: ${e.message}'));
+    } catch (e) {
+      return Result.error(Exception('Nie udało się usunąć profilu: $e'));
+    }
+  }
+
+  Future<Result<void>> resetPassword({required String oldPassword, required String newPassword}) async {
+    try {
+      final response = await apiClient.post('/api/change-password/', {
+        'old_password': oldPassword,
+        'new_password': newPassword,
+      });
+      if (response.statusCode == 200) {
+        return Result.ok(null);
+      } else {
+        return Result.error(Exception('Failed to reset password'));
+      }
+    } catch (e) {
+      return Result.error(Exception('Unknown error: $e'));
+    }
+  }
+
+  Future<Result<void>> deleteFriend(int userId) async {
+    try {
+      await apiClient.delete('/api/me/friends/$userId/remove/');
+      return Result.ok(null);
+    } on DioException catch (e) {
+      return Result.error(Exception('Nie udało się usunąć znajomego: ${e.message}'));
+    } catch (e) {
+      return Result.error(Exception('Nie udało się usunąć znajomego: $e'));
+    }
+  }
 }
