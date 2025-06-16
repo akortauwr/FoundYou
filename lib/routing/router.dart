@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:found_you_app/data/repositories/auth/auth_repository.dart';
+import 'package:found_you_app/data/services/location/location_service.dart';
 import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
 import 'package:found_you_app/ui/auth/login/view_models/login_view_model.dart';
 import 'package:found_you_app/ui/auth/login/widgets/login_view.dart';
@@ -67,15 +68,21 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
                     NearYouViewModel,
                     HomeViewModel
                   >(
-                    create:
-                        (context) => HomeViewModel(
-                          newMatchesVM: context.read<NewMatchesViewModel>(),
-                          recentLikesVM: context.read<RecentLikesViewModel>(),
-                          nearYouVM: context.read<NearYouViewModel>(),
-                        ),
-                    update:
-                        (context, newVM, recentVM, nearVM, homeVM) =>
-                            HomeViewModel(newMatchesVM: newVM, recentLikesVM: recentVM, nearYouVM: nearVM),
+                    create: (context) {
+                      final homeVM = HomeViewModel(
+                        newMatchesVM: context.read<NewMatchesViewModel>(),
+                        recentLikesVM: context.read<RecentLikesViewModel>(),
+                        nearYouVM: context.read<NearYouViewModel>(),
+                        profileRepository: context.read(),
+                        locationService: context.read<LocationService>(),
+                      );
+
+                      homeVM.init();
+                      return homeVM;
+                    },
+                    update: (context, newVM, recentVM, nearVM, homeVM) {
+                      return homeVM!;
+                    },
                   ),
                 ],
                 child: const HomeView(),
@@ -124,11 +131,11 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
               path: Paths.editData,
               name: 'editData',
               builder: (context, state) {
-
                 return ChangeNotifierProvider(
-                  create: (ctx) =>
-                  EditDataViewModel(authRepository: ctx.read(), profileRepository: ctx.read())
-                    ..loadInitialData(),
+                  create:
+                      (ctx) =>
+                          EditDataViewModel(authRepository: ctx.read(), profileRepository: ctx.read())
+                            ..loadInitialData(),
                   child: const EditDataView(),
                 );
               },
@@ -190,11 +197,7 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
       path: Paths.register,
       name: 'register',
       builder:
-          (context, state) =>
-          ChangeNotifierProvider(
-            create: (ctx) => RegisterViewModel(),
-            child: const RegisterView(),
-          ),
+          (context, state) => ChangeNotifierProvider(create: (ctx) => RegisterViewModel(), child: const RegisterView()),
       routes: [
         GoRoute(
           path: Paths.registerForm,

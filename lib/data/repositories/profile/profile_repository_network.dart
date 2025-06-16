@@ -20,15 +20,15 @@ class ProfileRepositoryNetwork extends ProfileRepository {
 
   @override
   Future<Result<void>> resetPassword({required String newPassword, required String oldPassword}) async {
-    return await apiClient.resetPassword(
-      newPassword: newPassword,
-      oldPassword: oldPassword,
-    );
+    return await apiClient.resetPassword(newPassword: newPassword, oldPassword: oldPassword);
   }
-
 
   @override
   Future<Result<void>> updateProfile({required Map<String, dynamic> data}) async {
     return await apiClient.updateProfile(data: data);
+  }
+
+  Future<Result<void>> updateLocation({required double latitude, required double longitude}) async {
+    return await apiClient.updateLocation(latitude: latitude, longitude: longitude);
   }
 }

@@ -40,6 +40,7 @@ dependencies:
   flutter_card_swiper: ^7.0.2
   google_fonts: ^6.2.1
   intl: ^0.20.2
+  geolocator: ^14.0.1
 
 
   # The following adds the Cupertino Icons font to your application.

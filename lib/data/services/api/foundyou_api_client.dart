@@ -216,4 +216,16 @@ class FoundYouApiClient {
       return Result.error(Exception('Unknown error: $e'));
     }
   }
+
+  Future<Result<void>> updateLocation({required double latitude, required double longitude}) async {
+    try {
+      await apiClient.patch('/api/me/location/', {
+        'latitude': latitude,
+        'longitude': longitude,
+      });
+      return Result.ok(null);
+    } catch (e) {
+      return Result.error(Exception('Nie udało się zaktualizować lokalizacji: $e'));
+    }
+  }
 }

@@ -9,6 +9,7 @@ import 'package:found_you_app/data/repositories/suggested_friends/suggested_frie
 import 'package:found_you_app/data/repositories/suggested_friends/suggested_friends_repository_network.dart';
 import 'package:found_you_app/data/services/api/auth_api_client.dart';
 import 'package:found_you_app/data/services/api/foundyou_api_client.dart';
+import 'package:found_you_app/data/services/location/location_service.dart';
 import 'package:found_you_app/data/services/secure_storage_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -25,6 +26,7 @@ List<SingleChildWidget> get providersRemote {
     Provider<AuthApiClient>(create: (_) => authApiClient),
     Provider<SecureStorageService>(create: (_) => secureStorageService),
     Provider<FoundYouApiClient>(create: (_) => FoundYouApiClient()),
+    Provider<LocationService>(create: (_) => LocationService()),
     ChangeNotifierProvider<AuthRepository>(
       create: (_) => AuthRepositoryNetwork(authApiClient: authApiClient, secureStorageService: secureStorageService),
     ),
