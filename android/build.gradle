@@ -1,5 +1,4 @@
 buildscript {
-    // Definicja wersji Kotlin
     ext {
         kotlin_version = '1.8.10'
     }
@@ -8,7 +7,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // Ustawiamy nową wersję AGP (tutaj 8.9.0) oraz plugin Kotlin
         classpath 'com.android.tools.build:gradle:8.9.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
