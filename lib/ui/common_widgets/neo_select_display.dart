@@ -28,7 +28,7 @@ class NeoSelectDisplay extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: NeoColors.purpleMystic,
+        color: NeoColors.neonCyan,
         border: Border.all(color: Colors.black, width: 3),
         borderRadius: BorderRadius.circular(8),
         boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(1, 1))],

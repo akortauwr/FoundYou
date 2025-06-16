@@ -93,7 +93,7 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
             widget.onChanged(b64);
           },
           child:
-              widget.value == null
+              widget.value == null || (widget.value is String && widget.value.isEmpty)
                   ? NeoButton(
                     onPressed: () async {
                       final picker = ImagePicker();
@@ -118,12 +118,34 @@ class _FormFieldWidgetState extends State<FormFieldWidget> {
                       boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(3, 3), blurRadius: 0)],
                     ),
                     child: ClipOval(
-                      child: Image.memory(
-                        base64Decode(widget.value),
-                        fit: BoxFit.fill,
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
+                      child:
+                          (widget.value is String && widget.value.startsWith('http'))
+                              ? Image.network(
+                                widget.value,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return const Center(child: CircularProgressIndicator());
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  debugPrint("Error loading network image: $error");
+                                  return const Icon(Icons.error, color: Colors.red, size: 48);
+                                },
+                              )
+                              : (widget.value is String && widget.value.isNotEmpty)
+                              ? Image.memory(
+                                base64Decode(widget.value),
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                                errorBuilder: (context, error, stackTrace) {
+                                  debugPrint("Error decoding base64 image: $error");
+                                  return const Icon(Icons.broken_image, color: Colors.grey, size: 48);
+                                },
+                              )
+                              : const Icon(Icons.person, size: 64, color: Colors.grey),
                     ),
                   ),
         );

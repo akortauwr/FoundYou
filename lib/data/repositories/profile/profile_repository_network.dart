@@ -25,4 +25,10 @@ class ProfileRepositoryNetwork extends ProfileRepository {
       oldPassword: oldPassword,
     );
   }
+
+
+  @override
+  Future<Result<void>> updateProfile({required Map<String, dynamic> data}) async {
+    return await apiClient.updateProfile(data: data);
+  }
 }

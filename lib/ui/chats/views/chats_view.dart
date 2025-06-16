@@ -39,11 +39,17 @@ class ChatsView extends StatelessWidget {
                     child: NeoCard(
                       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                       child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage:
-                              chat.member.imageUrl != null && chat.member.imageUrl!.isNotEmpty
-                                  ? NetworkImage(chat.member.imageUrl!)
-                                  : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                        leading: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 4),
+                          ),
+                          child: CircleAvatar(
+                            backgroundImage:
+                                chat.member.imageUrl != null && chat.member.imageUrl!.isNotEmpty
+                                    ? NetworkImage(chat.member.imageUrl!)
+                                    : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
+                          ),
                         ),
                         title: Text(chat.member.username),
 

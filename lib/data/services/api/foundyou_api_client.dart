@@ -207,4 +207,13 @@ class FoundYouApiClient {
       return Result.error(Exception('Nie udało się usunąć znajomego: $e'));
     }
   }
+
+  Future<Result<void>> updateProfile({required Map<String, dynamic> data}) async {
+    try {
+      await apiClient.patch('/api/me/', data);
+      return Result.ok(null);
+    } catch (e) {
+      return Result.error(Exception('Unknown error: $e'));
+    }
+  }
 }

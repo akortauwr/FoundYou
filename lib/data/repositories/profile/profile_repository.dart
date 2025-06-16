@@ -7,4 +7,6 @@ abstract class ProfileRepository {
   Future<Result<void>> deleteProfile();
 
   Future<Result<void>> resetPassword({required String newPassword, required String oldPassword});
+
+  Future<Result<void>> updateProfile({required Map<String, dynamic> data});
 }

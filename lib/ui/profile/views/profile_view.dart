@@ -48,6 +48,12 @@ class ProfileView extends StatelessWidget {
                 onChangePassword: () {
                   context.push(Paths.resetPassword);
                 },
+                onUpdateData: () async {
+                  final result = await context.push('/profile${Paths.editData}');
+                  if (result == true) {
+                    vm.loadProfile();
+                  }
+                },
                 onLogout: () {
                   vm.logout();
                   context.go(Paths.login);
@@ -62,7 +68,7 @@ class ProfileView extends StatelessWidget {
                   final bool? delete = await showDialog(
                     context: context,
                     builder:
-                        (context) => Center(
+                        (context) => const Center(
                           child: NeoDialog(
                             content:
                                 'Czy na pewno chcesz usunąć '
@@ -149,6 +155,7 @@ class ProfileInfoCard extends StatelessWidget {
 
 class SettingsCard extends StatelessWidget {
   final VoidCallback onChangePassword;
+  final VoidCallback onUpdateData;
   final VoidCallback onLogout;
   final VoidCallback onTermsOfUse;
   final VoidCallback onRules;
@@ -157,6 +164,7 @@ class SettingsCard extends StatelessWidget {
   const SettingsCard({
     super.key,
     required this.onChangePassword,
+    required this.onUpdateData,
     required this.onLogout,
     required this.onTermsOfUse,
     required this.onRules,
@@ -173,6 +181,8 @@ class SettingsCard extends StatelessWidget {
       child: Column(
         children: [
           _buildTile(icon: Icons.lock, title: 'Zmień hasło', onTap: onChangePassword),
+          const SizedBox(height: 16),
+          _buildTile(icon: Icons.edit, title: 'Edytuj dane', onTap: onUpdateData),
           const SizedBox(height: 16),
           _buildTile(icon: Icons.description, title: 'Regulamin', onTap: onRules),
           const SizedBox(height: 16),

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:found_you_app/data/repositories/auth/auth_repository.dart';
 import 'package:found_you_app/domain/models/suggested_friend/suggested_friend_model.dart';
-import 'package:found_you_app/domain/models/user_model/user_model.dart';
-import 'package:found_you_app/ui/auth/edit_data/view_models/edit_data_view_model.dart';
-import 'package:found_you_app/ui/auth/edit_data/views/edit_data_view.dart';
 import 'package:found_you_app/ui/auth/login/view_models/login_view_model.dart';
 import 'package:found_you_app/ui/auth/login/widgets/login_view.dart';
 import 'package:found_you_app/ui/auth/register/view_models/register_form_view_model.dart';
@@ -16,6 +13,8 @@ import 'package:found_you_app/ui/chats/view_models/chats_view_model.dart';
 import 'package:found_you_app/ui/chats/views/chats_view.dart';
 import 'package:found_you_app/ui/conversation/view_models/conversation_view_model.dart';
 import 'package:found_you_app/ui/conversation/views/conversation_view.dart';
+import 'package:found_you_app/ui/edit_data/view_models/edit_data_view_model.dart';
+import 'package:found_you_app/ui/edit_data/views/edit_data_view.dart';
 import 'package:found_you_app/ui/home/view_models/home_view_model.dart';
 import 'package:found_you_app/ui/home/views/home_view.dart';
 import 'package:found_you_app/ui/home_shell/view_models/home_shell_view_model.dart';
@@ -125,10 +124,11 @@ GoRouter router(AuthRepository authRepository) => GoRouter(
               path: Paths.editData,
               name: 'editData',
               builder: (context, state) {
-                final user = state.extra as UserModel;
 
                 return ChangeNotifierProvider(
-                  create: (ctx) => EditDataViewModel(authRepository: ctx.read(), initialUser: user)..loadForm(),
+                  create: (ctx) =>
+                  EditDataViewModel(authRepository: ctx.read(), profileRepository: ctx.read())
+                    ..loadInitialData(),
                   child: const EditDataView(),
                 );
               },
