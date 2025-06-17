@@ -22,9 +22,6 @@ class NearYouViewModel extends ChangeNotifier {
       return;
     }
 
-    _isLoading = true;
-    notifyListeners();
-
     final result = await _repository.loadNearYou();
     if (result is Ok<List<SuggestedFriendModel>>) {
       _suggestedFriends = result.value;
@@ -32,8 +29,6 @@ class NearYouViewModel extends ChangeNotifier {
       debugPrint('Error fetching suggested friends: $result');
     }
 
-    _isLoading = false;
-    notifyListeners();
   }
 
   bool isLikingUser(int userId) => _pendingLikes.contains(userId);

@@ -17,9 +17,6 @@ class RecentLikesViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchSuggestedFriends() async {
-    _isLoading = true;
-    notifyListeners();
-
     final result = await _repository.loadRecentLikes();
     switch (result) {
       case Ok<List<SuggestedFriendModel>> ok:
@@ -29,9 +26,6 @@ class RecentLikesViewModel extends ChangeNotifier {
         debugPrint('Error fetching recent likes: ${error.error}');
         break;
     }
-
-    _isLoading = false;
-    notifyListeners();
   }
 
   Future<void> likeUser(int userId) async {

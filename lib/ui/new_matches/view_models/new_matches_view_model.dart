@@ -50,8 +50,6 @@ class NewMatchesViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchSuggestedFriends() async {
-    _isLoading = true;
-    notifyListeners();
 
     final result = await _repository.loadNewMatches();
 
@@ -63,8 +61,6 @@ class NewMatchesViewModel extends ChangeNotifier {
         debugPrint('Error fetching new matches: ${error.error}');
         break;
     }
-    _isLoading = false;
-    notifyListeners();
   }
 
   Future<void> selectFriend(SuggestedFriendModel friend) async {
